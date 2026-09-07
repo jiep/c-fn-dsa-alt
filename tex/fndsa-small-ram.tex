@@ -1,0 +1,3694 @@
+% Use lualatex
+\documentclass{llncs}
+  
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian,english]{babel}
+\usepackage{fontspec}
+\usepackage{lmodern}
+\usepackage{mathtools}
+%\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{xspace}
+\usepackage{tabularx}
+\usepackage[lf]{ebgaramond}
+\usepackage{biolinum}
+\usepackage[cmintegrals,cmbraces]{newtxmath}
+\usepackage{ebgaramond-maths}
+\usepackage{multicol}
+\usepackage{sectsty}
+\usepackage[noend]{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[bottom]{footmisc}
+\usepackage{caption}
+%\captionsetup{font=small}
+\captionsetup{labelfont={sf,bf}}
+\usepackage{ragged2e}
+\usepackage{xcolor}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+% ebgaramond-maths, prior to version 1.3, lacks the "mu" in math. This
+% hack uses the "mu" from text italics.
+\DeclareFontFamily{U}{EBSUB}{}
+\DeclareFontShape{U}{EBSUB}{m}{it}{
+ <-> EBGaramond-Italic-tlf-lgr
+}{}
+\DeclareFontFamily{U}{EBSUB}{}
+\DeclareSymbolFont{EBSUB}{U}{EBSUB}{m}{it}
+\DeclareMathSymbol{\mu}{\mathord}{EBSUB}{`m}
+\DeclareMathSymbol{\varDelta}{\mathord}{EBSUB}{`D}
+\DeclareMathSymbol{\varOmega}{\mathord}{EBSUB}{`W}
+
+\definecolor{codebg}{rgb}{.97,.97,.99}
+\definecolor{gray}{rgb}{.4,.4,.4}
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{Maroon}{cmyk}{0, 0.87, 0.68, 0.32}
+\definecolor{RoyalBlue}{cmyk}{1, 0.50, 0, 0}
+\definecolor{blood}{rgb}{.6,0,0}
+
+\usepackage{listings}
+\AtBeginDocument{%\counterwithin{lstlisting}{section}%
+    \renewcommand\thelstlisting{\arabic{lstlisting}}}
+\renewcommand{\lstlistingname}{Listing}
+\DeclareCaptionFormat{listing}{#1#2#3}
+\captionsetup[lstlisting]{format=listing,singlelinecheck=false}
+
+\lstdefinestyle{zzpython}{%
+    frame=ltb,
+    framerule=0pt,
+    aboveskip=3mm,
+    belowskip=3mm,
+    framextopmargin=.5mm,
+    framexbottommargin=.5mm,
+    framexleftmargin=1mm,
+    framexrightmargin=1.5mm,
+    showstringspaces=false,
+    language=Python,
+    columns=fullflexible,
+    keepspaces=true,
+    %basicstyle={\small\ttfamily},
+    basicstyle={\fontsize{8pt}{9pt}\ttfamily},
+    numbers=left,
+    numberstyle={\fontsize{8pt}{9pt}\ttfamily\color{gray}},
+    keywordstyle=\color{webgreen},
+    commentstyle=\color{gray},
+    stringstyle=\color{Maroon},
+    identifierstyle=\color{RoyalBlue},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3,
+    backgroundcolor=\color{codebg},
+    captionpos=t,
+}
+
+\lstdefinestyle{zzc}{%
+    frame=ltb,
+    framerule=0pt,
+    aboveskip=3mm,
+    belowskip=3mm,
+    framextopmargin=.5mm,
+    framexbottommargin=.5mm,
+    framexleftmargin=1mm,
+    framexrightmargin=1.5mm,
+    showstringspaces=false,
+    language=C,
+    columns=fullflexible,
+    keepspaces=true,
+    %basicstyle={\small\ttfamily},
+    basicstyle={\fontsize{8pt}{9pt}\ttfamily},
+    numbers=left,
+    numberstyle={\fontsize{8pt}{9pt}\ttfamily\color{gray}},
+    keywordstyle=\color{webgreen},
+    commentstyle=\color{gray},
+    stringstyle=\color{Maroon},
+    identifierstyle=\color{RoyalBlue},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3,
+    backgroundcolor=\color{codebg},
+    captionpos=t,
+}
+
+\lstdefinelanguage{ARMAssembler}
+    {%
+        morekeywords={%
+            adc,adcs,%
+            add,adds,addw,%
+            adr,%
+            and,ands,%
+            asr,asrs,%
+            b,beq,bne,bcs,bcc,bmi,bpl,bvs,bvc,bhi,bls,bge,blt,bgt,ble,bal,bhs,blo,%
+            bfc,%
+            bfi,%
+            bic,bics,%
+            bkpt,%
+            bl,%
+            blx,%
+            bx,%
+            cbnz,cbz,%
+            clrex,%
+            clz,%
+            cmn,%
+            cmp,%
+            cps,%
+            cpy,%
+            csdb,%
+            dbg,%
+            dmb,%
+            dsb,%
+            eor,eors,%
+            isb,%
+            it,itt,ite,ittt,itet,itte,itee,%
+            itttt,ittte,ittet,ittee,itett,itete,iteet,iteee,%
+            ldc,ldcl,ldc2,ldc2l,%
+            ldm,ldmia,ldmfd,%
+            ldmdb,ldmea,%
+            ldr,%
+            ldrb,%
+            ldrbt,%
+            ldrd,%
+            ldrex,%
+            ldrexb,%
+            ldrexh,%
+            ldrh,%
+            ldrsb,%
+            ldrsbt,%
+            ldrsh,%
+            ldrsht,%
+            ldrt,%
+            lsl,lsls,%
+            lsr,lsrs,%
+            mcr,lcr2,%
+            mcrr,mcrr2,%
+            mla,%
+            mls,%
+            mov,movs,movw,movt,%
+            mrc,mrc2,%
+            mrrc,mrrc2,%
+            mrs,%
+            msr,%
+            mul,muls,%
+            mvn,mvns,%
+            neg,%
+            nop,%
+            orn,orns,%
+            orr,orrs,%
+            pkhbt,pkhtb,%
+            pld,%
+            pli,%
+            pop,%
+            pssbb,%
+            push,%
+            qadd,%
+            qadd16,%
+            qadd8,%
+            qasx,%
+            qdadd,%
+            qdsub,%
+            qsax,%
+            qsub,%
+            qsub16,%
+            qsub8,%
+            rbit,%
+            rev,%
+            rev16,%
+            revsh,%
+            ror,rors,%
+            rrx,%
+            rsb,rsbs,%
+            sadd16,%
+            sadd8,%
+            sasx,%
+            sbc,sbcs,%
+            sbfx,%
+            sdiv,%
+            sel,sev,%
+            shadd16,%
+            shadd8,%
+            shasx,%
+            shsax,%
+            shsub16,%
+            shsub8,%
+            smlabb,smlabt,smlatb,smlatt,%
+            smlad,smladx,%
+            smlal,%
+            smlalbb,smlalbt,smlaltb,smlaltt,%
+            smlald,smlaldx,%
+            smlawb,smlawt,%
+            smlsd,smlsdx,%
+            smlsld,smlsldx,%
+            smmla,smmlar,%
+            smmls,smmlsr,%
+            smmul,smmulr,%
+            smuad,smuadx,%
+            smulbb,smulbt,smultb,smultt,%
+            smull,%
+            smulwb,smulwt,%
+            smusd,smusdx,%
+            ssat,%
+            ssat16,%
+            ssax,%
+            ssbb,%
+            ssub16,%
+            ssub8,%
+            stc,stc2,%
+            stm,stima,stmea,%
+            stmdb,stmfd,%
+            str,%
+            strb,%
+            strbt,%
+            strd,%
+            strex,%
+            strexb,%
+            strexh,%
+            strh,%
+            strht,%
+            strt,%
+            sub,subs,%
+            svc,%
+            sxtab,%
+            sxtab16,%
+            sxtah,%
+            sxtb,%
+            sxtb16,%
+            sxth,%
+            tbb,tbh,%
+            teq,%
+            tst,%
+            uadd16,%
+            uadd8,%
+            uasx,%
+            ubfx,%
+            udf,%
+            udiv,%
+            uhadd16,%
+            uhadd8,%
+            uhasx,%
+            uhsax,%
+            uhsub16,%
+            uhsub8,%
+            umaal,%
+            umlal,%
+            umull,%
+            uqadd16,%
+            uqadd8,%
+            uqasx,%
+            uqsax,%
+            uqsub16,%
+            uqsub8,%
+            usad8,%
+            usada8,%
+            usat,%
+            usat16,%
+            usax,%
+            usub16,%
+            usub8,%
+            uxtab,%
+            uxtab16,%
+            uxtah,%
+            uxtb,%
+            uxtb16,%
+            uxth,%
+            vabs,%
+            vadd,%
+            vcmp,vcmpe,%
+            vcvta,vcvtn,vcvtp,vcvtm,%
+            vcvt,vcvtr,%
+            vcvtb,vcvtt,%
+            vdiv,%
+            vfma,vfms,%
+            vldm,%
+            vldr,%
+            vmaxnm,vminnm,%
+            vmla,vmls,%
+            vmov,%
+            vmrs,%
+            vmsr,%
+            vneg,%
+            vnmla,vnmls,vnmul,%
+            vpop,%
+            vpush,%
+            vrinta,vrintn,vrintp,vrintm,%
+            vrintx,%
+            vrintz,vrintr,%
+            vsel,%
+            vsqrt,%
+            vstm,%
+            vstr,%
+            vsub,%
+            wfe,%
+            wfi,%
+            yield},%
+        alsoletter={.,0,1,2,3,4,5,6,7,8,9},%
+        alsodigit={?},%
+        sensitive=false,%
+        morestring=[b]",%
+        morecomment=[s]{/*}{*/},%
+        morecomment=[l]@,%
+        morecomment=[l]//,%
+    }[keywords,comments,strings]
+
+\lstdefinestyle{zzarmasm}{%
+    frame=ltb,
+    framerule=0pt,
+    aboveskip=3mm,
+    belowskip=3mm,
+    framextopmargin=.5mm,
+    framexbottommargin=.5mm,
+    framexleftmargin=1mm,
+    framexrightmargin=1.5mm,
+    showstringspaces=false,
+    language=ARMAssembler,
+    columns=fullflexible,
+    basicstyle={\fontsize{8pt}{9pt}\ttfamily},
+    basewidth=0.5em,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{webgreen},
+    commentstyle=\color{gray},
+    stringstyle=\color{Maroon},
+    identifierstyle=\color{RoyalBlue},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3,
+    backgroundcolor=\color{codebg}
+}
+
+\lstdefinestyle{zzc}{%
+    frame=ltb,
+    framerule=0pt,
+    aboveskip=3mm,
+    belowskip=3mm,
+    framextopmargin=.5mm,
+    framexbottommargin=.5mm,
+    framexleftmargin=1mm,
+    framexrightmargin=1.5mm,
+    showstringspaces=false,
+    language=C,
+    columns=fullflexible,
+    basicstyle={\fontsize{8pt}{9pt}\ttfamily},
+    basewidth=0.5em,
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{webgreen},
+    commentstyle=\color{gray},
+    stringstyle=\color{Maroon},
+    identifierstyle=\color{RoyalBlue},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=3,
+    backgroundcolor=\color{codebg}
+}
+
+\newenvironment{forbidpagebreak}
+    {\par\nobreak\vfil\penalty 0\vfilneg
+     \vtop\bgroup}
+    {\par\xdef\tpd{\the\prevdepth}\egroup
+     \prevdepth=\tpd}
+
+% llncs removes generation of PDF bookmarks, we must add them back
+\usepackage{etoolbox}
+\makeatletter
+\let\llncs@addcontentsline\addcontentsline
+\patchcmd{\maketitle}{\addcontentsline}{\llncs@addcontentsline}{}{}
+\patchcmd{\maketitle}{\addcontentsline}{\llncs@addcontentsline}{}{}
+\patchcmd{\maketitle}{\addcontentsline}{\llncs@addcontentsline}{}{}
+\setcounter{tocdepth}{3}
+\makeatother
+\PassOptionsToPackage{hyphens}{url}
+\usepackage[pdftex,bookmarks=true]{hyperref}
+\hypersetup{
+    bookmarksopen=true,
+    bookmarksopenlevel=3,
+    bookmarksnumbered=true,
+    hidelinks,
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={green!50!black},
+    urlcolor={blue!80!black}
+}
+%\hypersetup{hidelinks}
+%\usepackage{attachfile2}
+
+\makeatletter
+  % Recover some math symbols that were masked by eb-garamond, but do not
+  % have replacement definitions.
+  \DeclareSymbolFont{ntxletters}{OML}{ntxmi}{m}{it}
+  \SetSymbolFont{ntxletters}{bold}{OML}{ntxmi}{b}{it}
+  \re@DeclareMathSymbol{\leftharpoonup}{\mathrel}{ntxletters}{"28}
+  \re@DeclareMathSymbol{\leftharpoondown}{\mathrel}{ntxletters}{"29}
+  \re@DeclareMathSymbol{\rightharpoonup}{\mathrel}{ntxletters}{"2A}
+  \re@DeclareMathSymbol{\rightharpoondown}{\mathrel}{ntxletters}{"2B}
+  \re@DeclareMathSymbol{\triangleleft}{\mathbin}{ntxletters}{"2F}
+  \re@DeclareMathSymbol{\triangleright}{\mathbin}{ntxletters}{"2E}
+  \re@DeclareMathSymbol{\partial}{\mathord}{ntxletters}{"40}
+  \re@DeclareMathSymbol{\flat}{\mathord}{ntxletters}{"5B}
+  \re@DeclareMathSymbol{\natural}{\mathord}{ntxletters}{"5C}
+  \re@DeclareMathSymbol{\star}{\mathbin}{ntxletters}{"3F}
+  \re@DeclareMathSymbol{\smile}{\mathrel}{ntxletters}{"5E}
+  \re@DeclareMathSymbol{\frown}{\mathrel}{ntxletters}{"5F}
+  \re@DeclareMathSymbol{\sharp}{\mathord}{ntxletters}{"5D}
+  \re@DeclareMathAccent{\vec}{\mathord}{ntxletters}{"7E}
+
+  % Change font for algorithm label.
+  \renewcommand\ALG@name{\sffamily\bfseries Algorithm}
+\makeatother
+
+% Use the sans-serif fonts (for which bold is properly defined) for
+% section headings. Also ensure that subsubsections get a number and
+% that the number is displayed (to distinguish them from paragraphs).
+\allsectionsfont{\sffamily}
+\setcounter{secnumdepth}{3}
+\pagestyle{plain}
+
+\makeatletter
+\renewenvironment{abstract}{%
+      \list{}{\advance\topsep by0.35cm\relax\small
+      \leftmargin=1cm
+      \labelwidth=\z@
+      \listparindent=\z@
+      \itemindent\listparindent
+      \rightmargin\leftmargin}\item[\hskip\labelsep
+                                    \textsf{\textbf{\abstractname}}]}
+    {\endlist}
+\makeatother
+\let\lemma\relax
+\spnewtheorem{lemma}{Lemma}{\sffamily\bfseries}{\itshape}
+
+\spnewtheorem{mtheorem}{Theorem}{\sffamily\bfseries}{\itshape}
+\spnewtheorem*{mproof}{Proof}{\sffamily\bfseries\itshape}{\rmfamily}
+
+\renewcommand{\algorithmicrequire}{\hbox to3.4em{\textbf{Input:}\hfill}}
+\renewcommand{\algorithmicensure}{\hbox to3.4em{\textbf{Output:}\hfill}}
+
+%\newcommand{\GF}{\mathrm{\textit{GF}}}
+\newcommand{\GF}{GF}
+\newcommand{\QR}{QR}
+\newcommand{\bB}{\mathbb{B}}
+\newcommand{\bF}{\mathbb{F}}
+\newcommand{\bG}{\mathbb{G}}
+\newcommand{\bN}{\mathbb{N}}
+\newcommand{\bZ}{\mathbb{Z}}
+\newcommand{\bR}{\mathbb{R}}
+\newcommand{\bQ}{\mathbb{Q}}
+\newcommand{\bC}{\mathbb{C}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\rM}{\text{M}}
+\newcommand{\rS}{\text{S}}
+\newcommand{\rmb}{\text{m}_\text{b}}
+\newcommand{\neutral}{\mathbb{O}}
+\newcommand{\vol}{\text{\textsf{vol}}}
+\newcommand{\bitlength}{\text{\textsf{len}}}
+\newcommand{\MAC}{\text{\textsf{MAC}}}
+\newcommand{\MAClen}{\text{\textsf{MAClen}}}
+\newcommand{\cc}{\text{\textsf{enc}}}
+\newcommand{\cclen}{\text{\textsf{clen}}}
+\newcommand{\Setup}{\text{\textsf{Setup}}}
+\newcommand{\Eval}{\text{\textsf{Eval}}}
+\newcommand{\Verify}{\text{\textsf{Verify}}}
+\newcommand{\VDF}{\text{\textsf{VDF}}}
+\newcommand{\VDFlen}{\text{\textsf{VDFlen}}}
+%\newcommand{\smod}[1]{\,\,\,(\text{mod}^{\pm} #1)}
+%\newcommand{\smodnospace}[1]{(\text{mod}^{\pm} #1)}
+\newcommand{\sign}{\text{\textsf{sign}}}
+\newcommand{\trace}{\text{Tr}}
+\newcommand{\qsolve}{\text{QSolve}}
+\newcommand{\rev}{\text{rev}}
+
+\newcommand{\ezut}{\textsc{ezut}\xspace}
+\newcommand{\xwj}{\textsc{xwj}\xspace}
+
+\newcommand{\eqvm}[3]{#1 \equiv #2 \,[#3]}
+\newcommand{\umod}[2]{#1 \,\,\text{mod}^{+}\, #2}
+\newcommand{\smod}[2]{#1 \,\,\text{mod}^{\pm}\, #2}
+\newcommand{\mont}[1]{\mathcal{M}(#1)}
+
+\newcommand{\norm}[1]{\left\|#1\right\|}
+\newcommand{\norminf}[1]{\norm{#1}_{\infty}}
+\newcommand{\adj}[1]{{#1}^*}
+\newcommand{\cconj}[1]{\overline{#1}}
+\newcommand{\inner}[2]{\langle #1, #2 \rangle}
+
+\raggedbottom
+
+\begin{document}
+
+\title{\textsf{A RAM-Efficient Implementation of Falcon}}
+
+\author{Thomas Pornin}
+\institute{NCC Group, \email{thomas.pornin@nccgroup.com}}
+
+\maketitle
+\noindent\makebox[\textwidth]{7 September, 2026}
+%FIXME: adjust date when (re)publishing
+
+\begin{abstract}
+We present a RAM-efficient implementation of Falcon: RAM usage has
+shrunk to about 11~kB, down from about 31~kB in the previous
+implementation of Falcon-512. This code is furthermore faster on Arm
+Cortex M4, with average signature generation cost down to 13.45 million
+cycles. Optimization techniques include a novel variant of the FFT,
+replacement of some floating-point operations with modular integer
+computations, delayed addition of input within the Fast Fourier sampling
+process, and an alternate signature reassembly process. More than half
+of the floating-point operations have been removed. The resulting
+implementation is now small enough to allow use in small embedded
+systems such as smart cards.
+\end{abstract}
+
+% ----------------------------------------------------------------------
+
+\section{Introduction}
+
+Falcon is a post-quantum signature scheme\cite{FalconRound3}; it was
+submitted to the NIST post-quantum cryptography standardization
+project\cite{NISTPQC} in 2017, and has been selected for becoming the
+NIST standard FIPS 206, under the name ``FN-DSA''. Falcon is a
+hash-and-sign scheme based on an NTRU lattice. In order to achieve small
+signatures and keys while maintaining the expected security level, a
+short vector is obtained with an appropriate randomization of Babai's
+Nearest Plane algorithm\cite{Bab1986}, as in Klein's
+sampler\cite{Kle2000}, except that an NP variant known as Fast Fourier
+Orthogonalization is employed, for much improved
+performance\cite{DucPre2016}. Falcon's parameter sets use a degree $n =
+2^\ell$; the two main choices are $n = 512$ (for NIST's ``level I''
+security, similar in strength to AES-128) and $n = 1024$ (for ``level
+V'', similar to AES-256).
+
+The verification algorithm of Falcon is very fast, uses little RAM, and
+fits in a small code footprint. The key pair generation algorithm is
+complicated and large; several previous works have been optimizing that
+algorithm\cite{PorPre2019,Por2023-1,Por2025-4}, which now runs with a
+large but tolerable CPU cost (e.g. it is still much faster than RSA key
+pair generation) and moderate RAM requirements (about 12 or 23~kB,
+depending on the degree $n$). The signature generation algorithm,
+though, still has significant RAM requirements (about 31~kB for $n =
+512$, 61~kB for $n = 1024$), which make it difficult to use on the
+smallest embedded systems such as smart cards, where RAM is usually a
+very scarce resource. Moreover, the signature generation algorithm, as
+specified in~\cite{FalconRound3}, uses floating-point operations, which
+are expensive on microcontrollers with no hardware FPU (or whose FPU
+does not support the required precision), and whose masking against
+side-channel analysis attacks is expected to be doable but
+difficult\cite{Ber2026,BerPaiTavBosCol2025,BerTav2025,CheChe2024,CheMinLiuGaoZho2025,KarAys2024}.
+This paper aims at reducing both the RAM requirements, and the number of
+floating-point operations, in Falcon's signature generation algorithm.
+
+As will be detailed in the rest of the paper, the RAM requirements for
+signature generation have been slashed by a factor of 3, down to about
+11~kB (for $n = 512$) and 21~kB (for $n = 1024$). More than half of the
+floating-point operations have been removed, with the side-effect of
+improving performance on an Arm Cortex M4 microcontroller (cost has
+dropped to 13.4 million cycles at $n = 512$, down from 17.0 millions).
+On large CPUs (x86, aarch64) which have an efficient hardware FPU with
+SIMD instructions, this new implementation is moderately slower (cost is
+increased by 17\% on a Skylake-class Intel x86, by 27\% on a 64-bit Arm
+Cortex A76). This new implementation is available at:
+\begin{center}
+    \url{https://github.com/pornin/c-fn-dsa-alt}
+\end{center}
+
+\paragraph{FN-DSA Standard.}
+As these lines are written, the NIST standard FIPS 206 is not published
+yet; a draft of that standard has been announced and has been sent into
+NIST's approval process at some point around mid-2025, and has since
+been stuck there for unclear reasons. There is no available estimate for
+when that draft of FIPS 206 will be made public, let alone the final
+FIPS 206. For the purposes of this paper, we use as reference the
+implementation available at:
+\begin{center}
+    \url{https://github.com/pornin/c-fn-dsa}
+\end{center}
+which matches, as of 30 July, 2026, my best guess of what the FIPS 206
+draft will contain. This is based on what NIST announced in various
+places (workshops, mailing-lists...). Compared to Falcon as submitted,
+the main changes, apart from inconsequential endianness choices in
+encodings, are the following:
+\begin{itemize}
+    \item The message to sign is hashed into a message representative $\mu$
+    along with some context information and a hash of the public key, as
+    is done in ML-DSA\cite{Fips204}. Only $\mu$ is used afterwards.
+
+    \item A new 40-byte random seed is generated for each signing attempt,
+    instead of reusing the same seed (this improves provability of the
+    security\cite{FouGajGroJanKil2026}).
+
+    \item The infinity norm of a valid signature is enforced to be at
+    most 840 (down from 2047).
+
+    \item The public key is in NTT representation.
+\end{itemize}
+This implementation is what will be called in this paper the
+``standard'' implementation. There is no guarantee that when the FIPS
+206 draft is published, it will really match this implementation.
+
+\paragraph{Interoperability and Compliance.}
+A thorny issue is the question of what is actually a ``compliant''
+Falcon/FN-DSA implementation. Right now, with no published standard nor
+even draft, there is no real notion of compliance, but NIST's plans seem
+to be, for the moment, to require strict reproducibility of test
+vectors. An implementation should provide a test API which receives a
+source random seed, and everything is deterministically specified from
+that seed. The point is to be able to validate that the Gaussian
+sampler, which is a rather complicated procedure, has been implemented
+properly and does not generate values with an exploitable bias;
+verifying strict reproducibility of test vectors goes a long way toward
+showing that an implementation at least follows the expected code
+structure. Unfortunately, this means that a truly compliant signature
+generator MUST perform exactly the same floating-point computations in
+the same order as the reference code, because any deviation in the last
+few bits of the inputs to the Gaussian sampler will at least
+occasionally induce divergences in the rejection sampling process.
+
+The implementation we describe here is \emph{safe} and \emph{fully
+interoperable}, but would not be strictly compliant in the sense above:
+\begin{itemize}
+
+    \item Safety: all operations are done with enough precision to ensure
+    that the security analysis of Falcon still applies (in fact, this
+    new implementation has somewhat \emph{better} precision than the
+    ``standard'' code, see section~\ref{sec:precision}).
+
+    \item Interoperability: this new implementation uses the same
+    formats for public keys, private keys and signatures; signatures
+    generated by the ``standard'' implementation are verifiable by our
+    new code, and vice versa. \emph{Full} interoperability denotes that
+    this also applies to private keys: all private keys generated by one
+    implementation are usable by the other (in fact the key pair
+    generator code is completely unchanged).
+
+\end{itemize}
+Our new implementation will \emph{most of the time} reproduce test vectors,
+by using the same private keys, input messages, and source random seeds.
+However, divergences will occur with probability about $1/8000$. If NIST
+indeed insists on strict reproducibility, then our new code would not be
+formally compliant. As explained in section~\ref{sec:hedging}, we
+deliberately broke that almost-reproducibility, but it is easy to
+reactivate (a one-line code change).
+
+\paragraph{Fixed-Point.}
+A recently published implementation uses fixed-point operations instead
+of floating-point\cite{AlmFouLacPre2026}. Their implementation is, like
+ours, safe and interoperable (it is not always \emph{fully}
+interoperable because it enforces some extra requirements on private
+keys, so that it cannot use some of the private keys generated by the
+``standard'' code). The fixed-point approach should promote performance
+on FPU-less hardware, and, more importantly, help with masking
+strategies against side-channel attacks. That fixed-point work is
+\emph{a priori} complementary with the optimizations described here. A
+future work is to merge both implementations, i.e. make the code
+presented here use fixed-point operations instead of floating-point.
+
+\paragraph{Main Ideas.}
+The main optimization ideas that we use are the following:
+\begin{itemize}
+
+    \item We design a new FFT variant, which removes about half of the
+    floating-point operations, and furthermore allows halving the
+    storage size of some polynomials. This is described in
+    section~\ref{sec:fft}. This new FFT might be applicable to other
+    schemes than Falcon; it can also be turned into a new NTT that works
+    with prime moduli equal to $-1$ modulo $n$, rather than the classic
+    $1$ modulo $2n$.
+
+    \item We apply the short representation of polynomials to the
+    intermediate node values in the Falcon tree. Moreover, the top-level
+    node of the tree is built specially, on-the-fly, with most polynomials
+    being computed over integers, using computations modulo $q = 12289$
+    and $q' = 18433$; our range analysis shows that the process is
+    exact and cannot hit any integer overflow (see section~\ref{sec:tree}).
+
+    \item Only the fractional part of target vectors is used in sampling,
+    and it is moreover added later in the process; this improves precision
+    and avoids some FFT computations. Similarly, the final output polynomial
+    in FFT representation is discarded (and actually not computed at all),
+    since the signature is recomputed from the sampled integers; this
+    removes the need for any inverse FFT in the whole scheme.
+    Section~\ref{sec:genopt} describes these optimizations.
+
+\end{itemize}
+
+% ----------------------------------------------------------------------
+
+\newpage
+\section{Falcon Signature Generation}\label{sec:falcon-std}
+
+We recall in this section the Falcon signature generation scheme (and
+parts of the key pair generation and verification). Compared with the
+Falcon specification\cite{FalconRound3}, we dispatch the operations over
+a slightly different structure of sub-algorithms, but the actual
+computations are not changed. We also skip the description of some
+operations, in particular the Gaussian sampling, that we do not modify.
+
+\subsection{Notations}
+
+\paragraph{Polynomial Ring.}
+The main parameter of Falcon is the degree $n = 2^\ell$, for some
+integer $\ell \geq 1$. The standard Falcon degree is either $n = 512$
+(for ``level I'' security) or $1024$ (for ``level V''). Weak versions,
+meant for research purposes and to help development, use lower degrees,
+from $n = 4$ to $256$. We consider polynomials modulo the cyclotomic
+polynomial $\Phi_n = X^n + 1$. Since $\Phi_n$ is irreducible over $\bQ$,
+the ring $\bQ[X]/\Phi_n$ is a field. The same does not hold for
+$\bR[X]/\Phi_n$ (for $n\geq 4$) nor for $\bC[X]/\Phi_n$; in the latter,
+$\Phi_n$ splits, with roots being $\zeta_{n,j} = e^{i(2j+1)\pi/n}$ for
+integers $j = 0$ to $n - 1$.
+
+A polynomial $a \in \bC[X]/\Phi_n$ can be expressed in \emph{coefficient
+representation}, i.e. as a sequence of $n$ elements of $\bC$ denoted
+$a[j]$ for $j = 0$ to $n - 1$, fulfilling $a = \sum_{j=0}^{n-1} a[j]
+X^j$. The \emph{FFT representation} of $a$ is the sequence of $n$ values
+$a(\zeta_{n,j})$ for $j = 0$ to $n - 1$. As will be detailed later, the
+FFT representation is redundant for the kind of polynomials used in
+Falcon, and we omit half or sometimes three quarters of it.
+
+\paragraph{Quotient Ring.}
+For $a, b\in\bZ[X]/\Phi_n$ (polynomials with integral coefficients) and
+some integer $q > 1$, we can consider equality and operations modulo
+$q$: $a = b \bmod q$ if and only if there exists some $w\in
+\bZ[X]/\Phi_n$ such that $a = b + qw$. Similarly, we say that $a$ is
+invertible modulo $q$ if and only if there exists some $t\in
+\bZ[X]/\Phi_n$ such that $at = 1 \bmod q$. Note that this implies that
+$a\neq 0$. By extension, we say that $a$ is invertible modulo $1$ if and
+only if $a\neq 0$.
+
+Equivalently, we can consider a polynomial ``modulo $q$'' by interpreting
+it as being defined over $\bZ_q[X]/\Phi_n$, with $\bZ_q$ being
+the ring of integers modulo $q$. If $q$ is prime and is such that
+$q = 1 \bmod{2n}$, then multiplications and divisions of polynomials
+in $\bZ[X]/\Phi_n$ can be considerably sped up by applying the NTT. In
+Falcon, we mainly use $q = 12289$, which matches these conditions. In
+the rest of this paper, we will also use the alternate modulus
+$q' = 18433$, for which the NTT is also efficient.
+
+\paragraph{Adjoint.}
+We define the \emph{(Hermitian) adjoint} of polynomial $a \in
+\bC[X]/\Phi_n$ to be the polynomial $\adj{a}$ which is such that
+$\adj{a}(\zeta) = \cconj{a(\zeta)}$ for all roots $\zeta$ of $\Phi_n$ in
+$\bC$. If the coefficients $a[j]$ are all real, then $\adj{a} = a[0] -
+\sum_{j=1}^{n-1} a[n-j] X^j$. For such a real polynomial, we can also
+obtain $\adj{a}$ by composition: $\adj{a} = a(1/X)$.
+
+Like complex conjugation, the adjoint is compatible with additions and
+multiplications: for polynomials $a$ and $b$, we have $\adj{(a + b)} =
+\adj{a} + \adj{b}$, $\adj{(ab)} = \adj{a} \adj{b}$, and $\adj{(a/b)} =
+\adj{a}/\adj{b}$.
+
+\paragraph{Inner Product and Norm.}
+For polynomials $a, b \in \bR[X]/\Phi_n$, their inner product is:
+\begin{equation*}
+    \inner{a}{b}
+        = \frac{1}{n} \sum_{\Phi_n(\zeta) = 0} a(\zeta) \cconj{b(\zeta)}
+        = \sum_{j=0}^{n-1} a[j] b[j]
+\end{equation*}
+This inner product allows defining the norm of a polynomial $a$ as
+$\norm{a} = \sqrt{\inner{a}{a}}$.
+
+We also define the \emph{infinity norm} of a polynomial $a$
+as $\norminf{a} = \text{max}_{j=0}^{n-1} |a[j]|$.
+
+The inner product and the norms extend to vectors of polynomials by
+computing them coefficient-wise; e.g. $\norm{(a, b)} = \norm{a} + \norm{b}$,
+and $\norminf{(a, b)} = \text{max}(\norminf{a}, \norminf{b})$.
+
+\paragraph{Splitting and Merging.}
+A polynomial $a \in \bQ[X]/\Phi_n$ can be split into even-indexed and
+odd-index coefficients:
+\begin{equation*}
+    a = a_{\text{even}}(X^2) + X a_{\text{odd}}(X^2)
+\end{equation*}
+with $a_{\text{even}} = \sum_{j=0}^{n/2-1} a[2j] X^j$ and
+$a_{\text{odd}} = \sum_{j=0}^{n/2-1} a[2j+1] X^j$; both
+$a_{\text{even}}$ and $a_{\text{odd}}$ are naturally in
+$\bQ[X]/\Phi_{n/2}$. The $\text{\textsf{split}}$ and
+$\text{\textsf{merge}}$ operations denote splitting and its opposite:
+$\text{\textsf{split}}(a) = (a_{\text{even}}, a_{\text{odd}})$, and
+$\text{\textsf{merge}}(a_{\text{even}}, a_{\text{odd}}) = a$.
+
+\paragraph{FFT.}
+The \emph{Fast Fourier Transform (FFT)} is an efficient way to compute,
+for a polynomial $a$, its FFT representation, which is the list of
+values $a(\zeta)$ for all roots $\zeta$ of $\Phi_n$ in $\bC$. The gist
+of the FFT is related to splitting: if $(a_{\text{even}},
+a_{\text{odd}}) = \text{\textsf{split}}(a)$, then, for any root $\zeta$
+of $\Phi_n$, $-\zeta$ is also a root of $\Phi_n$, and we have:
+\begin{eqnarray*}
+    a(\zeta) &=& a_{\text{even}}(\zeta^2) + \zeta a_{\text{odd}}(\zeta^2) \\
+    a(-\zeta) &=& a_{\text{even}}(\zeta^2) - \zeta a_{\text{odd}}(\zeta^2)
+\end{eqnarray*}
+Moreover, $\zeta^2$ is a root of $\Phi_{n/2}$; thus, given a polynomial
+$a$, we can split it into $a_{\text{even}}$ and $a_{\text{odd}}$,
+recursively apply the FFT on both (in $\Phi_{n/2}$), and then
+inexpensively recombine them into the FFT representation of $a$. The FFT
+has an asymptotic cost of $O(n \log n)$ operations, which is why it is
+computationally attractive. We denote by $\text{\textsf{FFT}}$ and
+$\text{\textsf{invFFT}}$ the FFT and its inverse operation,
+respectively.
+
+If $a\in\bR[X]/\Phi_n$, then for every root $\zeta$ of $\Phi_n$, its
+complex conjugate $\cconj{\zeta}$ is also a root of $\Phi_n$, and
+$a(\cconj{\zeta}) = \cconj{a(\zeta)}$ (the real coefficients of $a$ are
+unchanged by complex conjugation); thus, we can omit half of the
+elements of the FFT representation of $a$, since they can always be
+recomputed by complex conjugation.
+
+The FFT representation is compatible with operations on polynomials:
+addition, subtraction, multiplication and division of polynomials can be
+performed coefficient-wise on the FFT representations of the
+polynomials. Unfortunately, the $\zeta$ roots are complex numbers with
+irrational real and imaginary parts; this means that in practice, the
+FFT representation of a polynomial $a$ must use an approximate
+representation, usually some floating-point or fixed-point format.
+
+\paragraph{Vectors and Matrices.}
+Some operations use vectors of polynomials, and matrices whose
+coefficients are polynomials. They will be denoted with a bold font,
+e.g. $\mathbf{t} = (t_0, t_1)$. Vectors use the row convention, i.e.
+the vector coordinates are shown horizontally; when applying a linear
+operation $\mathbf{B}$ to a vector, the matrix is on the right of
+the operand, e.g. $\mathbf{t} \mathbf{B}$.
+
+\subsection{Key Pair Generation}
+
+\paragraph{Base Polynomials and the NTRU Equation.}
+Key pair generation consists in sampling two polynomials $f$ and $g$
+from $\bZ[X]/\Phi_n$ with a given Gaussian distribution for each
+coefficient. The key pair generation algorithm is supposed to enforce
+the following rules:
+\begin{itemize}
+
+    \item Coefficients of $f$ and $g$ have a limited range, since they
+    are encoded in the private key over a limited number of bits: $\norminf{f}
+    \leq \delta_n$ and $\norminf{g} \leq \delta_n$ for a value
+    $\delta_n$ which depends on $n$: $\delta_{1024} = 16$, $\delta_{512}
+    = \delta_{256} = 32$, $\delta_{128} = \delta_{64} = 64$, and
+    $\delta_n = 128$ for $n\leq 32$.
+
+    \item $f$ is invertible modulo $q$.
+
+    \item To allow generation of short signatures, some norms are limited:
+    \begin{equation*}
+        \text{max}\left(\norm{(g, -f)},
+        \norm{\left(\frac{q\adj{f}}{f\adj{f} + g\adj{g}},
+        \frac{q\adj{g}}{f\adj{f} + g\adj{g}}\right)} \right) \leq
+        1.17\sqrt{q}
+    \end{equation*}
+
+    \item There exist polynomials $F, G\in\bZ[X]/\Phi_n$ such that $fG -
+    gF = q$ (this is called the \emph{NTRU equation}). Moreover,
+    $\norminf{F}\leq 127$ and $\norminf{G}\leq 127$. When there is a
+    solution $(F, G)$ to the NTRU equation, then there are an infinity
+    of solutions (which are all the pairs $(F + kf, G + kg)$ for any
+    $k\in \bZ[X]/\Phi_n$), and in general several will match the
+    condition on the infinity norms; the key pair generation algorithm
+    chooses one solution, whose $F$ is part of the encoding of the
+    private key into bytes.
+
+\end{itemize}
+
+$G$ is not part of the encoding of the private key, because it can be
+reconstructed from the NTRU equation: given $f$, $g$ and $F$, we have
+$G = (q + gF)/f$. Since the division by $f$ is exact over the integers,
+$G$ can be evaluated modulo $q$, in which case the equation simplifies
+into $G = gF/f \bmod q$; the division can be done coefficient-wise in
+NTT representation modulo $q$. Since $\norminf{G} \leq 127 < q/2$, the
+result modulo $q$ can be converted to plain integers, yielding the
+actual $G$.
+
+There are several known methods to compute $(F, G)$ from $(f, g)$. The
+recommended method, which minimizes both RAM and CPU
+costs\cite{PorPre2019}, requires that the resultants of $f$ and $g$ with
+$\Phi_n$ are odd, coprime integers. Any key pair generation
+implementation is free to reject some $(f, g)$ pairs for which it cannot
+derive a solution $(F, G)$ even if, mathematically, such a solution
+exists. When a candidate $(f, g)$ pair is rejected, a new pair is
+sampled (\emph{both} polynomials are resampled; the sampler for $f$ and
+$g$ is fully defined by NIST and internally uses SHAKE256).
+
+$f$, $g$, $F$ and $G$ collectively make up the secret NTRU lattice basis:
+\begin{equation*}
+    \renewcommand*{\arraystretch}{1.3}
+    \setlength\arraycolsep{0.3em}
+    \mathbf{B} = \begin{bmatrix}
+        g & -f \\
+        G & -F
+    \end{bmatrix}
+\end{equation*}
+The inverse of this matrix is:
+\begin{equation*}
+    \renewcommand*{\arraystretch}{1.3}
+    \setlength\arraycolsep{0.3em}
+    \mathbf{B}^{-1} = \frac{1}{q} \begin{bmatrix}
+        -F & f \\
+        -G & g
+    \end{bmatrix}
+\end{equation*}
+The same lattice can be generated by the public matrix:
+\begin{equation*}
+    \renewcommand*{\arraystretch}{1.3}
+    \setlength\arraycolsep{0.3em}
+    \mathbf{Q} = \begin{bmatrix}
+        h & -1 \\
+        q & 0 
+    \end{bmatrix}
+\end{equation*}
+with $h = g/f \bmod q$. The Falcon public key is an encoding of $h$.
+
+\paragraph{Falcon Tree.}
+The \emph{Falcon tree} is the result of preprocessing a private key
+$(f, g, F, G)$ into a number of polynomials which are nominally in
+$\bQ[X]/\Phi_n$, but are usually expressed in FFT representation. These
+polynomials are organized in a binary tree structure:
+\begin{itemize}
+
+    \item Inner nodes have a \textsf{value}, which is a polynomial, and
+    two children (labelled \textsf{left} and \textsf{right}) which are
+    themselves trees.
+
+    \item Leaf nodes are real numbers.
+
+    \item A tree is represented by its root node, which is either an
+    inner node, or a leaf value.
+
+    \item The full tree starts with a root whose polynomial value is in
+    $\bQ[X]/\Phi_n$; the two children of a tree node that contains a
+    polynomial in $\bQ[X]/\Phi_m$ themselves have values that are
+    polynomials in $\bQ[X]/\Phi_{m/2}$. The degree is thus halved at
+    each level; when an inner node holds a \textsf{value} expressed in
+    $\bQ[X]/\Phi_2$, its two children are leaves, i.e. real numbers.
+
+\end{itemize}
+
+The algorithm \textsf{FalconTreeTop} (algorithm~\ref{alg:FalconTreeTop})
+computes the Falcon tree; it internally uses \textsf{FalconTreeInner}
+(algorithm~\ref{alg:FalconTreeInner}), which is recursive.
+
+\begin{algorithm}
+    \caption{\ \ \textsf{FalconTreeTop}\label{alg:FalconTreeTop}}
+    \begin{algorithmic}[1]
+        \Require{$f, g, F, G \in \bQ[X]/\Phi_n$}
+        \Ensure{Binary tree \textsf{T}}
+        \State{$a \leftarrow f\adj{f} + g\adj{g}$
+            \Comment{$a\in\bQ[X]/\Phi_n$ and $\adj{a} = a$}}
+        \State{$b \leftarrow F\adj{f} + G\adj{g}$}
+        \State{$c \leftarrow F\adj{F} + G\adj{G}$}
+        \State{$d \leftarrow c - b\adj{b}/a$
+                \Comment{$d\in\bQ[X]/\Phi_n$ and $\adj{d} = d$}}
+        \State{$L \leftarrow b/a$}
+        \State{$\text{\textsf{T.value}} \leftarrow L$}
+        \State{$\text{\textsf{T.left}}
+            \leftarrow \text{\textsf{FalconTreeInner}}(a)$}
+        \State{$\text{\textsf{T.right}}
+            \leftarrow \text{\textsf{FalconTreeInner}}(d)$}
+        \State{\Return{\textsf{T}}}
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{\ \ \textsf{FalconTreeInner}\label{alg:FalconTreeInner}}
+    \begin{algorithmic}[1]
+        \Require{$a \in \bQ[X]/\Phi_m$ such that $a = \adj{a}$}
+        \Ensure{Binary tree \textsf{T}}
+        \State{$(b, c) \leftarrow \text{\textsf{split}}(a)$
+            \Comment{$b, c\in\bQ[X]/\Phi_{m/2}$; also: $\adj{b} = b$}}
+        \State{$L \leftarrow \adj{c}/b$}
+        \State{$d \leftarrow b - c\adj{c}/b$ \Comment{$\adj{d} = d$}}
+        \State{$\text{\textsf{T.value}} \leftarrow L$}
+        \If{$m \geq 8$}
+            \State{$\text{\textsf{T.left}}
+                \leftarrow \text{\textsf{FalconTreeInner}}(b)$}
+            \State{$\text{\textsf{T.right}}
+                \leftarrow \text{\textsf{FalconTreeInner}}(d)$}
+        \Else
+            \State{$\text{\textsf{T.left}} \leftarrow b(0)$}
+            \State{$\text{\textsf{T.right}} \leftarrow d(0)$}
+        \EndIf
+        \State{\Return{\textsf{T}}}
+    \end{algorithmic}
+\end{algorithm}
+
+The Falcon specification describes the tree building with a single
+function (called $\text{\textsf{ffLDL}}^\star$) which takes over the
+roles of both \textsf{FalconTreeTop} and \textsf{FalconTreeInner}. Here,
+we use two separate functions to highlight some properties that we will
+use later on, in particular that the input of \textsf{FalconTreeInner}
+is a single polynomial which is futhermore equal to its adjoint.
+
+In the Falcon specification, once the tree has been computed, its leaves
+are normalized: if a leaf value is $x$, then it is replaced with
+$\sigma_n/\sqrt{x}$ for a constant $\sigma_n$ defined as:
+\begin{equation*}
+    \sigma_n = 1.17 \sqrt{\frac{q \log\left(4n\left(1 + 2^{32}\sqrt{\text{max}(2, n/4)}\right)\right)}{2\pi^2}}
+\end{equation*}
+In the description shown here, the normalization step is performed right
+before using the leaf in a call to \textsf{SamplerZ}, even though it could
+be done as part of the tree building.
+
+Computing the Falcon tree involves splitting polynomials, and computing
+some arithmetic operations on these polynomials. In plain coefficient
+representation, splitting a polynomial is trivial, but polynomial
+divisions are very much not so. It is possible to compute a division in
+$\bQ[X]/\Phi_n$ by performing an extended Euclidean GCD between the
+divisor and $\Phi_n$. Another method, which is applicable here thanks to
+the structure of $\Phi_n$, is to perform a descent in a tower of fields:
+for a polynomial $b\in\bQ[X]/\Phi_n$, we can define the Galois conjugate
+of $b$ as $b^\times(X) = b(-X)$ (i.e. we simply negate the odd-indexed
+coefficients), and then compute $a/b = (ab^\times)/(bb^\times)$. The
+product $bb^\times$ happens to have only even-indexed coefficients (the
+odd-indexed coefficients are null), hence it can be expressed as
+$bb^\times = b'(X^2)$ for a polynomial $b' \in\bQ[X]/\Phi_{n/2}$. Using
+this method recursively on $b'$, we finally transform the original
+fraction $a/b$ into $c/r$ with $r$ being a constant polynomial; at that
+point, the division can be applied on the coefficients of $c$ one by
+one. As detailed in \cite{PorPre2019}, the value $r$ is really the
+resultant of $b$ with $\Phi_n$.
+
+Regardless of the division method used, the resulting polynomial
+coefficients will have very large denominators, in the thousands of
+bits, implying large RAM usage and poor performance. To make the tree
+building tolerably efficient, the Falcon specification uses the FFT: the
+source polynomials $f$, $g$, $F$ and $G$ are converted to the FFT
+representation (as $n/2$ complex values each), and all operations are
+performed in the FFT domain. Addition, subtraction, multiplication and
+division of polynomials are then done coefficient-wise. Splitting in
+the FFT domain is denoted \textsf{splitfft} in the Falcon specification,
+and can be done efficiently: for any root $\zeta$ of $\Phi_n$, $\zeta^2$
+is a root of $\Phi_{n/2}$, and:
+\begin{eqnarray*}
+    a_{\text{even}}(\zeta^2) &=& (a(\zeta) + a(-\zeta))/2 \\
+    a_{\text{odd}}(\zeta^2) &=& (a(\zeta) - a(-\zeta))/(2\zeta)
+\end{eqnarray*}
+
+The Falcon tree depends only on the private key (the $f$, $g$, $F$ and
+$G$ polynomials) and, as such, can be precomputed, though this is not
+mandatory; it is also possible to recompute it at signing time.
+Signature generation involves a depth-first walk of the tree in
+right-to-left order; this can be combined with a dynamic generation that
+only needs to temporarily store the polynomials in the path from the
+root to the current leaf, thus not needing the RAM space that would be
+required for storing the whole tree.
+
+\subsection{Signature Generation}
+
+Signature of a message $M$ first requires pre-processing $M$ along with
+some contextual information (e.g. if $M$ is really a hashed value, then
+an identifier for the used hash function is included) and a hash of the
+public key; the output is a 64-byte string $\mu$. Then, a random 40-byte
+seed $r$ is generated, and hashed along with $\mu$ to feed a rejection
+sampling process that outputs a polynomial $c\in\bZ_q[X]/\Phi_n$. The
+40-byte seed will be included in the signature, so that verifiers may
+recompute $c$. If the signature generation fails (it can happen, with a
+relatively low probability), a new 40-byte seed is
+generated\footnote{This is one of the differences between the original
+Falcon\cite{FalconRound3} and the presumed future FIPS 206; in the
+original Falcon, $r$ was reused in that case.}, but $\mu$ is reused. We
+omit here the details of the generation of $c$.
+
+We suppose for now that the private key was decoded into $f$, $g$ and
+$F$, then $G$ was recomputed using the NTRU equation modulo $q$, and
+the Falcon tree $\text{\textsf{T}}$ was built. Given $c$, the signature
+generation proceeds as follows:
+\begin{enumerate}
+    \item Compute $\mathbf{t} = (c, 0) \mathbf{B}^{-1} = (-cF/q, cf/q)$.
+
+    \item Sample a vector $\mathbf{z}$ of integral polynomials
+    through the \textsf{ffSampling} algorithm.
+
+    \item Compute $\mathbf{s} = (\mathbf{t} - \mathbf{z}) \mathbf{B}$.
+
+    \item If $\norm{\mathbf{s}}$ and $\norminf{\mathbf{s}}$ are low
+    enough, then try to encode the second element of $\mathbf{s}$
+    into bytes; if the encoding succeeds, then this is the signature.
+    Otherwise, the process starts again with a new random 40-byte seed
+    $r$ and thus a new polynomial $c$.
+
+\end{enumerate}
+
+The intuition behind this process is the following: the signature is a
+vector $\mathbf{e}$ which is part of the lattice defined by the public
+basis $\mathbf{Q}$ (for which $\mathbf{B}$ is also a basis) and which is
+\emph{close} to the target vector $(c, 0)$. The lattice consists of all
+vectors $\mathbf{k} \mathbf{B}$ for any integral polynomial
+$\mathbf{k}$; the vector $\mathbf{t}$ is such that $\mathbf{t}
+\mathbf{B}$ is \emph{equal} to $(c, 0)$, but $\mathbf{t}$ is not
+integral ($\mathbf{B}^{-1}$ starts with a $1/q$ factor). The
+\textsf{ffSampling} procedure finds a vector $\mathbf{z}$ which is
+integral such that $\mathbf{z} \mathbf{B}$ is close to $\mathbf{t}
+\mathbf{B}$, at which point we can set $\mathbf{e} = \mathbf{z}
+\mathbf{B}$. The signature itself is then an encoding of $\mathbf{s} =
+(c, 0) - \mathbf{e} = (\mathbf{t} - \mathbf{z}) \mathbf{B}$, which has
+low norm. For appropriate security, $\mathbf{e}$ must not be \emph{too
+close} to the target $(c, 0)$, since that would otherwise leak too much
+information about the secret basis $\mathbf{B}$; the \textsf{ffSampling}
+procedure is a variant of Klein's sampler\cite{Kle2000}, which is itself
+a randomized variant of Babai's Nearest Plane algorithm\cite{Bab1986}.
+Klein's sampler implementation has a large cost (in $O(n^2)$);
+\textsf{ffSampling} organizes it with a recursive splitting process
+which benefits from the FFT representation, for a $O(n\log n)$
+cost\cite{DucPre2016}.
+
+\textsf{ffSampling} (algorithm~\ref{alg:ffSampling}) uses the Falcon
+tree; namely, it receives as parameters a degree $m$, a target vector
+$\mathbf{t}$ of polynomials in $\bQ[X]/\Phi_m$, and a Falcon tree whose
+root node holds a value which is itself an element of $\bQ[X]/\Phi_m$.
+The process is recursive, the degree $m$ being halved whenever going one
+level deeper in the recursion; when $m = 1$, the tree is reduced to a
+single real value, which is used as one of the parameters of
+\textsf{SamplerZ}.
+
+\begin{algorithm}
+    \caption{\ \ \textsf{ffSampling}\label{alg:ffSampling}}
+    \begin{algorithmic}[1]
+        \Require{degree $m$,
+            target $\mathbf{t} = (t_0, t_1) \in (\bQ[X]/\Phi_m)^2$,
+            a Falcon tree \textsf{T} whose root has degree $m$}
+        \Ensure{$\mathbf{z} = (z_0, z_1) \in (\bZ[X]/\Phi_m)^2$}
+        \If{$m = 1$}
+            \State{$\sigma' \leftarrow \sigma_n/\text{\textsf{T}}$\Comment{At
+                degree 1, the tree is a single real number}}.
+            \State{$z_0 \leftarrow \text{\textsf{SamplerZ}}(t_0, \sigma')$}
+            \State{$z_1 \leftarrow \text{\textsf{SamplerZ}}(t_1, \sigma')$}
+            \State{\Return{$(z_0, z_1)$}}
+        \EndIf
+        \State{$\mathbf{v} \leftarrow \text{\textsf{split}}(t_1)$}
+        \State{$\mathbf{y} \leftarrow \text{\textsf{ffSampling}}(m/2,
+            \mathbf{v}, \text{\textsf{T.right}})$}
+        \State{$z_1 \leftarrow \text{\textsf{merge}}(\mathbf{y})$}
+        \State{$L \leftarrow \text{\textsf{T.value}}$}
+        \State{$t'_0 \leftarrow t_0 + (t_1 - z_1)L$}
+        \State{$\mathbf{u} \leftarrow \text{\textsf{split}}(t'_0)$}
+        \State{$\mathbf{w} \leftarrow \text{\textsf{ffSampling}}(m/2,
+            \mathbf{u}, \text{\textsf{T.left}})$}
+        \State{$z_0 \leftarrow \text{\textsf{merge}}(\mathbf{w})$}
+        \State{\Return{$(z_0, z_1)$}}
+    \end{algorithmic}
+\end{algorithm}
+
+The \textsf{SamplerZ} function takes as inputs a target real number $x$
+and a width $\sigma'$, and it returns an integer $z$ sampled from a
+Gaussian distribution centred on $x$ and with standard deviation
+$\sigma'$. \textsf{SamplerZ} internally consumes random bits from a
+random source. We will not detail here how \textsf{SamplerZ} works,
+except to express an important characteristic, which is that if
+$\text{\textsf{SamplerZ}}(x, \sigma')$ returns the integer $z$ for a
+given state of its internal random source, then, for any integer $j$,
+$\text{\textsf{SamplerZ}}(x + j, \sigma')$ should return $z + j$ for the
+same internal random source state, and consume exactly as many bits from
+that source. In other words, \textsf{SamplerZ} first splits the input
+$x$ into an integer $x_i$ and a fractional part $x_f$ such that $x = x_i
++ x_f$ and $0\leq x_f < 1$; it then performs the sampling using $x_f$
+alone, and finally adds back $x_i$ to the sampled integer.
+
+\subsection{Signature Verification}
+
+Signature verification works over the message $M$, the public lattice
+basis $\mathbf{Q}$, and the signature, which nominally includes $r$ and
+the vector $\mathbf{s} = (s_0, s_1)$. The verifier computes the message
+representative $\mu$, then (using $r$) the target polynomial $c$. The
+signature is deemed valid if all of the following hold:
+\begin{eqnarray*}
+    c &=& s_0 + s_1 h \mod q \\
+    \norm{\mathbf{s}} &\leq& \beta \\
+    \norminf{\mathbf{s}} &\leq& \gamma_\infty
+\end{eqnarray*}
+The thresholds for the last two conditions are scheme parameters:
+$\beta = 1.1 \sigma_n \sqrt{2n}$, and $\gamma_\infty = 840$. The first
+condition really expresses that $(c, 0) - \mathbf{s}$ is part of the
+lattice generated by the public matrix $\mathbf{Q}$. Since this equation
+allows recomputing $s_0$ from $s_1$ (using $s_0 = c - s_1 h \bmod q$),
+only $s_1$ and the random seed $r$ need to be actually encoded in the
+signature. As for the public matrix $\mathbf{Q}$, its contents can be
+conveyed by encoding only the public polynomial $h$, whose coefficients
+are all integers in the $[0, q-1]$ range.
+
+% ----------------------------------------------------------------------
+
+\newpage
+\section{Optimizing the FFT}\label{sec:fft}
+
+In the Falcon specification, the FFT is used throughout the process in
+order to speed up operations and in particular polynomial divisions.
+Polynomials $f$, $g$, $F$, $G$ and $c$ are all converted to FFT
+representation; the computations of $\mathbf{t} = (-cF/q, cf/q)$ and all
+\textsf{split}, \textsf{merge} and arithmetic operations on polynomials
+in \textsf{ffSampling} are then performed on FFT representations. At the
+deepest recursion level, polynomials $t_0$ and $t_1$ are modulo $\Phi_1
+= X + 1$, i.e. they have degree zero, and are equal to their FFT
+representation, so that their values can be used directly in
+\textsf{SamplerZ}. Finally, the output of \textsf{ffSampling} can be
+used to compute $\mathbf{s}$, still working with FFT representations,
+and only at the end is $\mathbf{s}$ reconverted back to coefficient
+representation through the inverse FFT. In total, following the Falcon
+specification, five FFTs and two inverse FFTs are performed on
+polynomials. Making these operations more efficient thus seems important
+for performance.
+
+Here, we primarily target small embedded systems, such as
+microcontrollers using an Arm Cortex M4 core. Such systems do not offer
+hardware support for floating-point operations with the precision needed
+by Falcon; these operations must then be emulated with integer code,
+which should furthermore avoid leaking secret information through
+side-channels, and thus should at least operate in a constant-time way.
+The cost of floating-point operations thus dominates that of the FFT,
+and the primary goal is to reduce the number of such operations. Our
+assembly-optimized implementations have the following costs:
+\begin{itemize}
+
+    \item Addition: 72 cycles
+
+    \item Combined addition-subtraction: 87 cycles
+
+    \item Multiplication: 36 cycles
+
+\end{itemize}
+A combined addition-subtraction is obtaining both $x + y$ and $x - y$
+for given inputs $x$ and $y$. Addition is counter-intuitively more
+expensive than multiplication because it involves shifting operands to
+make them share the same exponent, and that shift is expensive,
+especially since the shift amount may or may not exceed the size of a
+register, and constant-time discipline forces us to always cover all
+cases. Negation, and scaling by a power of two (in particular, dividing
+a value by 2), are inexpensive, so that the cost of a subtraction can be
+considered to be the same as that of an addition (in all of the
+subsequent text, we will loosely talk of ``additions'' to designate both
+additions and subtractions, since they have the same cost). These
+figures are in the context of our Falcon implementation, which uses the
+IEEE 754 ``binary64'' format, and for which it can be proven that NaNs,
+infinites and denormals never occur, neither as source operands nor as
+outputs; the only special values are zeros.
+
+We will here estimate costs in numbers of additions (\textsc{a}) (which
+can be subtractions in practice), combined addition-subtractions
+(\textsc{as}) and multiplications (\textsc{m}).
+
+\subsection{Classic FFT}
+
+We call ``classic FFT'' the algorithm that applies the ``Cooley-Tukey
+butterfly'' repeatedly\cite{CooTuk1965}\footnote{The algorithm was
+actually invented by Gauss more than a century before\cite{Gau1866}.},
+which really is about computing $a(\zeta)$ and $a(-\zeta)$, for roots
+$\zeta$ of $\Phi_m$, from the values $a_{\text{even}}(\zeta^2)$ and
+$a_{\text{odd}}(\zeta^2)$, which are the FFT representations of
+$a_{\text{even}}$ and $a_{\text{odd}}$ in the ring $\bR[X]/\Phi_{n/2}$.
+The corresponding inverse FFT simply reverts all operations using the
+reverse of the Cooley-Tukey butterfly, usually known as the
+``Gentleman-Sande butterfly''\cite{GenSan1966}. Practical
+implementations work in-place, to avoid extra memory allocation and
+unneeded data movement, which has the side-effect of returning the FFT
+representation in so-called ``bit-reversal order''. We define the
+\textsf{rev} function:
+\begin{equation*}
+    \text{\textsf{rev}}\left(\alpha, \sum_{j=0}^{\alpha-1} x_j 2^j\right) =
+        \sum_{j=0}^{\alpha-1} x_j 2^{\alpha - 1 - j}
+\end{equation*}
+with values $x_j \in [0, 1]$ (i.e. the $x_j$ values are the digits of
+the representation of an integer from $[0, 2^\alpha - 1]$ in radix two, and
+the \textsf{rev} function reverses the order of that bit sequence). The
+classic FFT and its inverse are shown in algorithms \textsf{FFT-Classic}
+(algorithm~\ref{alg:fft-classic}) and \textsf{invFFT-classic}
+(algorithm~\ref{alg:ifft-classic}).
+
+\begin{algorithm}
+    \caption{\ \ \textsf{FFT-classic}\label{alg:fft-classic}}
+    \begin{algorithmic}[1]
+        \Require{$a = \sum_{j=0}^{n-1} a[j] X^j \in \bR[X]/\Phi_n$,
+            for $n = 2^\ell$}
+        \Ensure{FFT representation of $a$ in bit-reversal order}
+        \For{$\alpha = 1$ \textbf{to} $\ell - 1$}
+            \State{$t \leftarrow n/2^{\alpha+1}$}
+            \State{$m \leftarrow 2^\alpha$}
+            \For{$j = 0$ \textbf{to} $m/2 - 1$}
+                \State{$s_r \leftarrow Z_r[m + j]$\Comment{
+                    $Z_r[\text{\textsf{rev}}(\ell, j)] = \cos(\pi j/n)$}}
+                \State{$s_i \leftarrow Z_i[m + j]$\Comment{
+                    $Z_i[\text{\textsf{rev}}(\ell, j)] = \sin(\pi j/n)$}}
+                \For{$k = 0$ \textbf{to} $t/2 - 1$}
+                    \State{$k_0 \leftarrow 2^{\ell - \alpha} j + k$}
+                    \State{$k_1 \leftarrow k_0 + t$}
+                    \State{$(x_r, x_i) \leftarrow (a[k_0], a[k_0 + n/2])$}
+                    \State{$(y_r, y_i) \leftarrow (a[k_1], a[k_1 + n/2])$}
+                    \State{$z_r \leftarrow y_r s_r - y_i s_i$}
+                    \State{$z_i \leftarrow y_r s_i + y_i s_r$}
+                    \State{$(a[j_0], a[j_0 + n/2])
+                        \leftarrow (x_r + z_r, x_i + z_i)$}
+                    \State{$(a[j_1], a[j_1 + n/2])
+                        \leftarrow (x_r - z_r, x_i - z_i)$}
+                \EndFor
+            \EndFor
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{\ \ \textsf{invFFT-classic}\label{alg:ifft-classic}}
+    \begin{algorithmic}[1]
+        \Require{FFT representation of $a$ in bit-reversal order}
+        \Require{$a = \sum_{j=0}^{n-1} a[j] X^j \in \bR[X]/\Phi_n$}
+        \For{$\alpha = \ell - 1$ \textbf{down to} $1$}
+            \State{$t \leftarrow 2^{\alpha - 1}$}
+            \State{$m \leftarrow n/2^\alpha$}
+            \For{$j = 0$ \textbf{to} $m/2 - 1$}
+                \State{$s_r \leftarrow Z_r[m + j]$
+                    \Comment{Same $Z_r[]$ array as in \textsf{FFT-classic}.}}
+                \State{$s_i \leftarrow -Z_i[m + j]$
+                    \Comment{Same $Z_i[]$ array as in \textsf{FFT-classic}.}}
+                \For{$k = 0$ \textbf{to} $t - 1$}
+                    \State{$k_0 \leftarrow 2^\alpha j + k$}
+                    \State{$k_1 \leftarrow k_0 + t$}
+                    \State{$(x_r, x_i) \leftarrow (a[k_0], a[k_0 + n/2])$}
+                    \State{$(y_r, y_i) \leftarrow (a[k_1], a[k_1 + n/2])$}
+                    \State{$(a[j_0], a[j_0 + n/2])
+                        \leftarrow ((x_r + y_r)/2, (x_i + y_i)/2)$}
+                    \State{$(z_r, z_i)
+                        \leftarrow ((x_r - y_r)/2, (x_i - y_i)/2)$}
+                    \State{$a[k_1] \leftarrow z_r s_r - z_i s_i$}
+                    \State{$a[k_1 + n/2] \leftarrow z_r s_i + z_i s_r$}
+                \EndFor
+            \EndFor
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+The following points are noteworthy:
+\begin{itemize}
+
+    \item Since the source polynomials are from $\bR[X]/\Phi_n$, the FFT
+    representation only returns $n/2$ complex values (the other $n/2$
+    values are implicit since they can be obtained through conjugation).
+    \textsf{FFT-classic} returns $a(\zeta_{n,2j})$ for $j = 0$ to $n/2-1$,
+    with $\zeta_{n,2j} = e^{i(4j+1)\pi/n}$.
+
+    \item The FFT coefficients are in bit-reversal order, with the real
+    and imaginary parts separate; namely:
+    \begin{equation*}
+        a(\zeta_{n,\text{\textsf{rev}}(\ell, j)})
+            = {\hat a}[j] + i {\hat a}[j + n/2]
+    \end{equation*}
+    for $j = 0$ to $n/2 - 1$, and ${\hat a}$ denoting the contents of
+    the $a$ array when \textsf{FFT-classic} terminates. This separation
+    of the real and imaginery parts implies that the first formal
+    iteration of the FFT algorithm does nothing (which is why the
+    counter $\alpha$ starts at 1 in algorithm~\ref{alg:fft-classic},
+    instead of 0); it also promotes use of SIMD instruction sets since
+    memory slots at successive addresses are processed identically.
+
+    \item Constants $Z_r[]$ and $Z_i[]$ take up a total of 16384 bytes
+    of code space to support degrees up to $n = 1024$ and using 64-bit
+    floating-point values; however, this size can easily be reduced to
+    4096 bytes by using the facts that $\sin(x) = \sin(\pi - x)$ and
+    $\cos(x) = \sin(\pi/2 - x)$, so that only the values of $\sin(\pi
+    j/n)$ for $j = 0$ to $n/2 - 1$ really need to be stored.
+
+    \item The description of \textsf{FFT-classic} details the operations
+    on real and imaginary parts separately, and not using an abstract
+    notation with complex numbers, to highlight the cost of the
+    multiplication by $\zeta$ (which is $s_r + i s_i$ in the algorithm):
+    such an operation requires four floating-point multiplications and
+    two floating-point additions\footnote{This could also be implemented
+    with three multiplications and five additions, with
+    $(y_r + y_i)(s_r + s_i) = y_r s_r + y_i s_i + (y_r s_i + y_i s_r)$,
+    and computing $y_r s_r$ and $y_i s_i$ separately; however, this would
+    be more expensive since floating-point additions are more expensive
+    than floating-point multiplications.}. Our main optimization technique
+    aims at avoiding multiplications of complex values.
+
+\end{itemize}
+
+Algorithm \textsf{FFT-classic} involves $\ell - 1$ iterations of the
+outer loop; each iteration involves combining the $n$ elements by pairs,
+each combination involving two additions, two addition-subtractions, and
+four multiplications. In the first iteration, some marginal savings are
+possible: $m = 2$, so that $s_r = Z_r[2] = \cos(\pi/4) = \sin(\pi/4) =
+Z_i[2] = s_i$; thus, in that first outer iteration, $y_r s_r = y_r s_i$,
+$y_i s_i = y_i s_r$, and each pair may use three addition-subtractions
+and two multiplications. The total cost of \textsf{FFT-classic} is then
+$(n/2)((2\ell - 4)\text{\textsc{a}} + (2\ell - 1)\text{\textsc{as}} +
+(4\ell - 6)\text{\textsc{m}})$. Analysis for \textsf{invFFT-classic} is
+similar and yields the same cost estimate.
+
+\subsection{FFT of a Self-Adjoint Polynomial}
+
+Let $a \in \bR[X]/\Phi_n$. We define that:
+\begin{itemize}
+
+    \item $a$ is \emph{self-adjoint} if and only if: $\adj{a} = a$
+
+    \item $a$ is \emph{$X$-adjoint} if and only if: $\adj{a} = X a$
+
+    \item $a$ is \emph{$1/X$-adjoint} if and only if: $\adj{a} = (1/X) a$
+
+    \item $a$ is \emph{neg-adjoint} if and only if: $\adj{a} = -a$
+
+\end{itemize}
+
+The following remark shows that for all four categories, the full
+representation is redundant, and half of the coefficients can be inferred
+from the other half:
+\begin{remark}\label{remark:adjcoeffs}
+For $a \in \bR[X]/\Phi_n$:
+\begin{itemize}
+
+    \item If $a$ is self-adjoint then $a[n/2] = 0$, and
+    $a[n/2 + j] = -a[n/2 - j]$ for $j = 1$ to $n/2 - 1$.
+
+    \item If $a$ is $X$-adjoint then $a[j] = -a[n - 1 - j]$ for
+    $j = 0$ to $n/2 - 1$.
+
+    \item If $a$ is $1/X$-adjoint then $a[1] = a[0]$, and
+    $a[n + 1 - j] = -a[j]$ for $j = 2$ to $n/2$.
+
+    \item If $a$ is neg-adjoint then $a[0] = 0$, and
+    $a[n/2 + j] = a[n/2 - j]$ for $j = 1$ to $n/2 - 1$.
+
+\end{itemize}
+\end{remark}
+
+As previously defined, for any polynomial $a\in \bR[X]/\Phi_n$,
+$\adj{a}(\zeta) = \cconj{a(\zeta)}$ for all roots $\zeta$ of $\Phi_n$.
+Apart from giving an easy way to transform a polynomial into its adjoint
+in FFT representation (just negate the imaginary part of each FFT
+coefficient), this implies that if $a$ is self-adjoint, then all its FFT
+coefficients are real. In particular, in the representation used by
+\textsf{FFT-classic}, elements of index $n/2$ to $n-1$ are the imaginary
+parts of the FFT coefficients, and thus they are all equal to zero in a
+self-adjoint polynomial, and can be omitted. Moreover, for both
+\textsf{FFT-classic} and \textsf{invFFT-classic}, values from the first
+half of the array ($a[0]$ to $a[n/2-1]$) are never combined with values
+from the second half ($a[n/2]$ to $a[n-1]$). This allows making variants
+\textsf{FFT-selfadj-classic} and \textsf{invFFT-selfadj-classic} for
+self-adjoint polynomials: they work with half-size arrays ($n/2$
+elements instead of $n$) and have half the cost of the full
+\textsf{FFT-classic} and \textsf{invFFT-classic}, i.e. $(n/4)((2\ell -
+4)\text{\textsc{a}} + (2\ell - 1)\text{\textsc{as}} + (4\ell -
+6)\text{\textsc{m}})$.
+
+We can do better. Some easily proven properties are the following:
+\begin{remark}\label{remark:split-selfadj}
+Let $a \in \bR[X]/\Phi_n$ a self-adjoint polynomial. If
+$(a_{\text{even}}, a_{\text{odd}}) = \text{\textsf{split}}(a)$, then
+$a_{\text{even}}$ is self-adjoint, and $a_{\text{odd}}$ is $X$-adjoint.
+\end{remark}
+
+\begin{remark}
+In $\bR[X]/\Phi_n$, $1 + X$ is $1/X$-adjoint, and $X^{n/2}$ is neg-adjoint.
+\end{remark}
+
+Let's consider $a \in \bR[X]/\Phi_n$ a self-adjoint polynomial, and
+$(a_{\text{even}}, a_{\text{odd}}) = \textsf{split}(a)$. Define
+$b_{\text{odd}} = (1 + X) a_{\text{odd}}$ (this is multiplication in
+$\bR[X]/\Phi_{n/2}$, since the output of \text{\textsf{split}} consists
+of half-degree polynomials). Then:
+\begin{equation*}
+    \adj{b}_{\text{odd}} = \adj{(1 + X)} \adj{a}_{\text{odd}}
+        = (1/X) X (1 + X) a_{\text{odd}} = b_{\text{odd}}
+\end{equation*}
+Thus, $b_{\text{odd}}$ is self-adjoint. When applying polynomial $a$ to
+the roots $\zeta$ of $\Phi_n$, we obtain:
+\begin{eqnarray*}
+    a(\zeta) &=& a_{\text{even}}(\zeta^2) + \zeta a_{\text{odd}}(\zeta^2) \\
+             &=& a_{\text{even}}(\zeta^2)
+                 + \frac{\zeta}{1 + \zeta^2} b_{\text{odd}}(\zeta^2)
+\end{eqnarray*}
+Note that $a$, $a_{\text{even}}$ and $b_{\text{odd}}$ are all
+self-adjoint, and thus $a(\zeta)$, $a_{\text{even}}(\zeta^2)$ and
+$b_{\text{odd}}(\zeta^2)$ are real numbers. It follows that $\zeta/(1 +
+\zeta^2) \in \bR$, and, crucially, the multiplication of that value with
+$b_{\text{odd}}(\zeta^2)$ is between two reals, not two complex values,
+thus involving a single floating-point multiplication and no addition at
+all. Indeed, we have:
+\begin{equation*}
+    \frac{\zeta_{n,j}}{1 + \zeta_{n,j}^2}
+        = \frac{e^{i(2j+1)\pi/n}}{1 + e^{i(2(2j+1))\pi/n}}
+        = \frac{1}{e^{-i(2j+1)\pi/n} + e^{i(2j+1)\pi/n}}
+        = \frac{1}{2\cos ((2j+1)\pi/n)}
+\end{equation*}
+This yields an FFT algorithm for self-adjoint polynomials which works
+in two steps:
+\begin{enumerate}
+    \item Split the source polynomial into even-indexed and odd-indexed
+    coefficients, then multiply by $1 + X$ the odd-indexed half, and
+    apply the same process recursively on both halves.
+    \item Recombine the polynomials by pairs, starting with degree 1
+    and upward, using the equations above and the combination values
+    $\zeta/(1 + \zeta^2)$.
+\end{enumerate}
+Algorithm \textsf{FFT-selfadj-new} (algorithm~\ref{alg:fft-selfadj-new})
+implements this algorithm. The constants $R[j]$ are such that:
+\begin{equation*}
+    R[2^{\alpha - 2} + \text{\textsf{rev}}(\alpha - 2, j)]
+        = \frac{1}{2 \cos ((4 j + 1)\pi/2^\alpha)}
+\end{equation*}
+for all $j = 0$ to $2^{\alpha - 2} - 1$. $R[0]$ is not used, and $R[1] =
+\sqrt{2}/2$. To support polynomials of degree $n = 2^\ell$, the array
+$R[]$ must be computed for up to $\alpha = \ell$, which means a total of
+$2^{\ell - 1} = n/2$ elements. For Falcon, we need to support up to $n =
+1024$ and we use 64-bit floating-point values, so that the footprint of
+the constant $R[]$ array is 4096 bytes.
+
+\begin{algorithm}
+    \caption{\ \ \textsf{FFT-selfadj-new}\label{alg:fft-selfadj-new}}
+    \begin{algorithmic}[1]
+        \Require{$a[0]$ to $a[n/2 - 1]$ for $a\in\bR[X]/\Phi_n$ such
+            that $n = 2^\ell \geq 4$ and $\adj{a} = a$}
+        \Ensure{FFT representation of $a$ in bit-reversal order (half-size)}
+        \For{$\alpha = 0$ \textbf{to} $\ell - 3$}
+                \Comment{Loop skipped if $\ell < 3$.}
+            \For{$k = 2^{\ell - alpha - 2} - 1$ \textbf{down to} $1$}
+                \State{$k_0 \leftarrow 2^{\alpha + 1} k$}
+                \For{$j = 0$ \textbf{to} $2^\alpha - 1$}
+                    \State{$a[k_0 + j + 2^\alpha]
+                        \leftarrow a[k_0 + j + 2^\alpha]
+                        + a[k_0 + j - 2^\alpha]$}
+                \EndFor
+            \EndFor
+            \For{$j = 0$ \textbf{to} $2^\alpha - 1$}
+                \State{$a[j + 2^\alpha] \leftarrow 2 a[j + 2^\alpha]$}
+            \EndFor
+        \EndFor
+
+        \For{$j = 0$ \textbf{to} $n/4 - 1$}
+            \State{$(x, y) \leftarrow (a[j], a[j + n/4])$\Comment{If $a$ is
+                integral, values are converted to floating-point here.}}
+            \State{$z \leftarrow y \sqrt{2}$\Comment{$\sqrt{2} = 2R[1]$}}
+            \State{$(a[j], a[j + n/4]) \leftarrow (x + z, x - z)$}
+        \EndFor
+
+        \For{$\alpha = 1$ \textbf{to} $\ell - 2$}
+                \Comment{Loop skipped if $\ell < 3$.}
+            \State{$t \leftarrow 2^{\ell - \alpha - 2}$}
+            \State{$m \leftarrow 2^\alpha$}
+            \For{$j = 0$ \textbf{to} $m - 1$}
+                \State{$s \leftarrow R[m + j]$\Comment{$R[m + j]
+                    = 1/(2\cos((4\text{\textsf{rev}}(\alpha, j)
+                        + 1)\pi/2^{\alpha + 2}))$}}
+                \For{$k = 0$ to $t - 1$}
+                    \State{$k_0 \leftarrow 2^{\ell - \alpha - 1} j + k$}
+                    \State{$k_1 \leftarrow k_0 + t$}
+                    \State{$(x, y) \leftarrow (a[k_0], a[k_1])$}
+                    \State{$z \leftarrow y s$}
+                    \State{$(a[k_0], a[k_1]) \leftarrow (x + z, x - z)$}
+                \EndFor
+            \EndFor
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+In \textsf{FFT-selfadj-new}, the first loop (lines 1-8) implements the
+splits and multiplications by $1 + X$, and the third loop (lines 13-24)
+performs the recombinations; however, the first loop lacks its last
+iteration (last value of $\alpha$ is $\ell - 3$, not $\ell - 2$), and
+the third loop lacks its first iteration (first value of $\alpha$ is 1,
+not 0): these missing steps have been merged into the second loop (lines
+9-12). Indeed, the last (missing) iteration of the first loop would just
+have multiplied half of the value by $2$, while the first (missing)
+iteration of the third loop would have multiplied the same values by
+$R[1] = \sqrt{2}/2$; the two operations can be done with a single
+multiplication by $\sqrt{2}$. The main reason for this merge is to
+highlight an important characteristic: if the source polynomial has
+integer coefficients (i.e. $a \in \bZ[X]/\Phi_n$), then all operations
+in the first loop can be performed over plain integers, which is vastly
+faster than using floating-point on our target hardware. As we will see,
+this is the case in Falcon.
+
+The first loop has $\ell - 2$ outer iterations, each involving $n/4$
+additions, though some of these additions are really doublings; if the
+source polynomial is integral, then all these operations are on
+integers. The second loop uses $n/4$ addition-subtractions and $n/4$
+multiplications. The third loop has $\ell - 2$ outer iterations, each
+using $n/4$ addition-subtractions and $n/4$ multiplications. The total
+cost of \textsf{FFT-selfadj-new} is then $(n/4)((\ell - 2)\text{\textsc{a}}
++ (\ell - 1)\text{\textsc{as}} + (\ell - 1)\text{\textsc{m}})$; if the
+input is integral, the $(\ell - 2)\text{\textsc{a}}$ term disappears
+(it is replaced with integer additions). This cost is less than half
+the cost of \textsf{FFT-selfadj-classic}.
+
+Algorithm \textsf{invFFT-selfadj-new}
+(algorithm~\ref{alg:ifft-selfadj-new}) is a straightforward reversal of
+the operations of \textsf{FFT-selfadj-new}. It uses the constants $R'[]$
+which are such that $R'[j] = 1/(2R[j])$ for all $j$ (the size of $R'$ is
+4096 bytes when using 64-bit floating-point values and supporting
+degrees up to $n = 1024$). When the polynomial is known to be integral,
+floating-point values can be converted back to integers (with
+round-to-nearest) in the middle loop, and the third loop (the reverse of
+the first loop in \textsf{FFT-selfadj-new}) uses only operations on
+integers.
+
+\begin{algorithm}
+    \caption{\ \ \textsf{invFFT-selfadj-new}\label{alg:ifft-selfadj-new}}
+    \begin{algorithmic}[1]
+        \Require{FFT representation of $a$ in bit-reversal order (half-size)}
+        \Ensure{$a[0]$ to $a[n/2 - 1]$ for $a\in\bR[X]/\Phi_n$ such
+            that $n = 2^\ell \geq 4$ and $\adj{a} = a$}
+        \For{$\alpha = \ell - 2$ \textbf{down to} $1$}
+                \Comment{Loop skipped if $\ell < 3$.}
+            \State{$t \leftarrow 2^{\ell - \alpha - 2}$}
+            \State{$m \leftarrow 2^\alpha$}
+            \For{$j = 0$ \textbf{to} $m - 1$}
+                \State{$s \leftarrow R'[m + j]$\Comment{$R'[m + j]
+                    = \cos((4\text{\textsf{rev}}(\alpha, j)
+                        + 1)\pi/2^{\alpha + 2}) = 1/(2R[m + j])$}}
+                \For{$k = 0$ to $t - 1$}
+                    \State{$k_0 \leftarrow 2^{\ell - \alpha - 1} j + k$}
+                    \State{$k_1 \leftarrow k_0 + t$}
+                    \State{$(x, y) \leftarrow (a[k_0], a[k_1])$}
+                    \State{$(u, v) \leftarrow (x + y, x - y)$}
+                    \State{$(a[k_0], a[k_1]) \leftarrow (u/2, vs)$}
+                \EndFor
+            \EndFor
+        \EndFor
+
+        \For{$j = 0$ \textbf{to} $n/4 - 1$}
+            \State{$(x, y) \leftarrow (a[j], a[j + n/4])$}
+            \State{$(u, v) \leftarrow (x + y, x - y)$}
+            \State{$(a[j], a[j + n/4]) \leftarrow (u/2, v(1/\sqrt{8})$
+                \Comment{If $a$ is integral, values are converted to
+                integers here.}}
+        \EndFor
+
+        \For{$\alpha = \ell - 3$ \textbf{down to} $0$}
+                \Comment{Loop skipped if $\ell < 3$.}
+            \For{$j = 0$ \textbf{to} $2^\alpha - 1$}
+                \State{$a[j + 2^\alpha] \leftarrow a[j + 2^\alpha]/2$}
+            \EndFor
+            \For{$k = 1$ \textbf{to} $2^{\ell - alpha - 2} - 1$}
+                \State{$k_0 \leftarrow 2^{\alpha + 1} k$}
+                \For{$j = 0$ \textbf{to} $2^\alpha - 1$}
+                    \State{$a[k_0 + j + 2^\alpha]
+                        \leftarrow a[k_0 + j + 2^\alpha]
+                        - a[k_0 + j - 2^\alpha]$}
+                \EndFor
+            \EndFor
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Improved FFT}
+
+Algorithm \textsf{FFT-selfadj-new} is an improved version of the
+computation of the FFT for self-adjoint polynomials. Here, we show how
+to also improve the general case, not just self-adjoint polynomials. The
+main technique is to decompose the source polynomial into a sum of two
+polynomials which can both be represented by self-adjoint polynomials:
+given $c\in\bR[X]/\Phi_n$, we find self-adjoint polynomials $a$ and $b$
+such that $c = a + X^{n/2}b$. We can then apply \textsf{FFT-selfadj-new}
+on both $a$ and $b$. Using $\hat a$, $\hat b$ and $\hat c$ to denote
+the FFT representations of $a$, $b$ and $c$, we have:
+\begin{equation*}
+    {\hat c}(\zeta) = {\hat a}(\zeta) + \zeta^{n/2} {\hat b}(\zeta)
+\end{equation*}
+
+The FFT representation returned by \textsf{FFT-classic} keeps only
+$a(\zeta_{n,2j})$ for $j = 0$ to $n/2 - 1$ (specifically, it returns
+only the first $n/2$ values of $a(\zeta_{n,\text{\textsf{rev}}(\ell,j')})$
+for increasing values of $j'$, and the bit-reversal implies that all
+these $\text{\textsf{rev}}(\ell,j')$ are even integers). We have
+$\zeta_{n,2j}^{n/2} = e^{i(4j+1)\pi/2} = i$ for all $j = 0$ to $n/2$,
+thus ${\hat c}(\zeta) = {\hat a}(\zeta) + i {\hat b}(\zeta)$ for all the
+$\zeta$ we are interested in. Since $a(\zeta)$ and $b(\zeta)$ are all
+real ($a$ and $b$ are self-adjoint), this implies that the FFT
+representations of $a$ and $b$ are really the real and imaginary parts
+of the elements of the FFT representation of $c$. In our chosen memory
+layout with real and imaginary parts separated by $n/2$ elements, ${\hat
+c}$ is then simply the concatenation of ${\hat a}$ and ${\hat b}$.
+
+Note that $X^{n/2}b$ is neg-adjoint; we can thus easily obtain $a$ and $b$:
+\begin{eqnarray*}
+    a &=& (\adj{c} + c)/2 \\
+    b &=& (\adj{c} - c)X^{n/2}/2
+\end{eqnarray*}
+Algorithm \textsf{FFT-new} (algorithm~\ref{alg:fft-new}) implements
+this method; the reverse operation is performed by \textsf{invFFT-new}
+(algorithm~\ref{alg:ifft-new}).
+
+\begin{algorithm}
+    \caption{\ \ \textsf{FFT-new}\label{alg:fft-new}}
+    \begin{algorithmic}[1]
+        \Require{$c\in\bR[X]/\Phi_n$ such that $n = 2^\ell \geq 4$}
+        \Ensure{FFT representation of $c$ in bit-reversal order}
+        \State{$c[0] \leftarrow 2c[0]$}
+        \State{$c[n/2] \leftarrow 2c[n/2]$}
+        \For{$j = 1$ \textbf{to} $n/2 - 1$}
+            \State{$(x, y) \leftarrow (c[j], c[n - j])$}
+            \State{$(c[j], c[n - j]) \leftarrow (x - y, x + y)$
+                \Comment{$c[0..n/2-1] = 2a$, and $c[n/2..n-1] = 2b$.}}
+        \EndFor
+        \State{$\text{\textsf{FFT-selfadj-new}}(c[0..n/2-1])$}
+        \State{$\text{\textsf{FFT-selfadj-new}}(c[n/2..n-1])$}
+        \For{$j = 0$ to $n - 1$}
+            \State{$c[j] \leftarrow c[j]/2$}
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{\ \ \textsf{invFFT-new}\label{alg:ifft-new}}
+    \begin{algorithmic}[1]
+        \Require{FFT representation of $c$ in bit-reversal order}
+        \Ensure{$c\in\bR[X]/\Phi_n$ such that $n = 2^\ell \geq 4$}
+        \For{$j = 0$ to $n - 1$}
+            \State{$c[j] \leftarrow 2c[j]$}
+        \EndFor
+        \State{$\text{\textsf{invFFT-selfadj-new}}(c[0..n/2-1])$}
+        \State{$\text{\textsf{invFFT-selfadj-new}}(c[n/2..n-1])$}
+        \State{$c[0] \leftarrow c[0]/2$}
+        \State{$c[n/2] \leftarrow c[n/2]/2$}
+        \For{$j = 1$ \textbf{to} $n/2 - 1$}
+            \State{$(x, y) \leftarrow (c[j], c[n - j])$}
+            \State{$(c[j], c[n - j]) \leftarrow ((y + x)/2, (y - x)/2)$}
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+In these implementations, we apply a factor of 2 to $a$
+and $b$, so that the initial loop decomposes $c$ into $2a$ and $2b$:
+this is done so that when $c$ is an integral polynomial (as is the
+case in Falcon) then the decomposition can be performed with only
+integer operations. The corrective factor $1/2$ is applied on the
+FFT representation (halving is inexpensive on floating-point values).
+
+Total cost of \textsf{FFT-new} is twice that of \textsf{FFT-selfadj-new},
+plus an extra $n/2$ addition-subtractions when the the source polynomial
+is not integral, hence $(n/2)((\ell - 2)\text{\textsc{a}}
++ \ell\text{\textsc{AS}} + (\ell - 1)\text{\textsc{m}})$ in the general
+case, which is less than half the cost of \textsf{FFT-classic}. The
+inverse algorithm \textsf{invFFT-new} has the same cost.
+
+\begin{remark}
+There are other possible decompositions of a polynomial $c$ into two
+self-adjoint polynomials; for instance, one may find self-adjoint
+polynomials $a$ and $b$ such that $c = a + b/(1 + X)$, i.e. $c$ is the
+sum of a self-adjoint and an $X$-adjoint polynomials. We here favour the
+$c = a + X^{n/2} b$ decomposition because it yields the same FFT
+representation as \textsf{FFT-classic}, thus keeping other operations in
+Falcon unchanged.
+\end{remark}
+
+\subsection{Input Range and Benchmarks}\label{sec:fft-new-range}
+
+We focus here on \textsf{FFT-new}, with an integral input polynomial
+whose coefficients are represented over 32-bit integers. The
+computations which are performed over plain integers are correct only as
+long as they do not incur an overflow. In the opening loop of
+\textsf{FFT-new} (algorithm~\ref{alg:fft-new}, steps 1-5), each value
+$c[j]$ is replaced with the sum or the difference of two coefficients of
+the input. The resulting values are then passed to
+\textsf{FFT-selfadj-new} (algorithm~\ref{alg:fft-selfadj-new}, steps
+1-7) which runs $\ell - 2$ iterations of a loop; at each iteration, some
+of the values are replaced with the sum of two values produced by the
+previous iteration. In total, this means that $|c[j]| \leq 2^{\ell-1}
+\norminf{c}$ for any $j$, when reaching step 8 of
+\textsf{FFT-selfadj-new}; afterwards, values are converted to
+floating-point and no longer limited to the 32-bit integer range.
+Correspondingly, for degree $n \leq 1024$, if $\norminf{c} < 2^{22}$,
+then no overflow may occur in the entire \textsf{FFT-new}. All uses of
+\textsf{FFT-new} (and \textsf{FFT-selfadj-new}) in this paper will be
+shown to fulfill that condition.
+
+We implemented and benchmarked these algorithms on an Arm Cortex M4
+microcontroller (code is in C but the addition, addition-subtraction and
+multiplications are hand-optimized in assembly). For an integral
+polynomial held in 32-bit signed integers, \textsf{FFT-classic} runs in
+611608 cycles (for degree $n = 512$), or 1369401 cycles (for $n =
+1024$). With \textsf{FFT-new}, these figures drop to 385940 and 855782
+cycles, respectively. We can see that the extra integer-only operations
+have a non-negligible cost, but the performance gain is nonetheless
+substantial.
+
+\subsection{Annex: Extension to NTT}
+
+The \emph{Number Theoretic Transform} (NTT) is analogous to the FFT when
+working modulo a prime integer $q$. To apply the NTT on polynomials in
+$\bZ_q[X]/\Phi_n$, we normally want $\Phi_n = X^n + 1$ to split over
+$Z_q$, i.e. that $q = 1 \bmod 2n$. This is a slightly restrictive
+condition. For instance, Falcon uses $q = 12289$ because it needs to
+work up to degree $n = 1024$, and 12289 is the smallest prime that is
+equal to 1 modulo 2048. It is possible to some extent to use a
+\emph{partial} NTT if the modulus is not adequate for the full degree;
+for instance, ML-KEM\cite{Fips203} uses $q = 3329$, which is good for NTT
+up to degree 128, but applies it to polynomials modulo $X^{256} + 1$.
+The method is simply to split the input $a$ into $a_{\text{even}}$ and
+$a_{\text{odd}}$ and apply the NTT on both; however, multiplications of
+polynomials in such a partial NTT representation become more
+complicated:
+\begin{equation*}
+    (ab)(\zeta) =
+        (a_{\text{even}} b_{\text{even}}
+            + X a_{\text{odd}} b_{\text{odd}})(\zeta^2)
+        + \zeta (a_{\text{even}} b_{\text{odd}}
+            + a_{\text{odd}} b_{\text{even}})(\zeta^2)
+\end{equation*}
+i.e. more operations in $\bZ_q$ are needed compared to a simple
+coefficient-wise multiplication. Generally speaking, if we want to work
+with polynomials of degree $n = 2^\ell$ but the modulus allows the plain
+NTT only up to $2^{\ell - \gamma}$ then multiplications of two
+polynomials in partial NTT representation will need $O(2^\gamma n)$
+multiplications in $\bZ_q$. We thus prefer $\gamma$ to remain small. For
+degree $n = 1024$, there are not many good choices of primes lower than
+12289: 7681, 10753 and 11777 allow up to degree 256 (hence $2^\gamma =
+4$), while 257, 769, 3329, 7937 and 9473 work natively only up to degree
+128, and thus imply $2^\gamma = 8$ when $n = 1024$.
+
+A different way is to consider $q = -1 \bmod n$. With such a modulus,
+$-1$ is not a square in $\bZ_q$, and we can extend that field to
+$\bF_{q^2}$ by adjoining a formal element $i$ such that $i^2 = -1$; this
+is the same construction as complex numbers with regard to reals. Note
+that if $q = -1 \bmod n$ then there is some integer $k$ such that $q =
+kn - 1$, which implies that $q^2 - 1 = (q - 1)(q + 1) = (kn - 2)kn$.
+With $n = 2^\ell$ being even, we get that $q^2 = 1 \bmod 2n$: polynomial
+$\Phi_n$ splits over $\bF_{q^2}$, and we can apply the FFT, including
+the improved \textsf{FFT-new} and \textsf{invFFT-new} algorithms. All
+operations on complex numbers, in particular conjugation, directly map
+to $\bF_{q^2}$. We only need to arbitrarily choose a root $\delta$ of
+$\Phi_n = X^n + 1$ in $\bF_{q^2}$, then use the roots $\zeta_{n,j} =
+\delta^{2j+1}$ for $j = 0$ to $n - 1$. In total, we get an FFT and
+inverse FFT with good efficiency (comparable to a plain full-degree
+NTT), and multiplications of two polynomials in FFT representation (in
+$\bF_{q^2}$) require $2n$ multiplications in $\bF_q$ (the equivalent of
+$2^\gamma = 2$ in terms of efficiency). Available moduli less than 12289
+and that support degree $n = 1024$ for this FFT in $\bF_{q^2}$ are 5519,
+6143 and 8191; this last value, in particular, is a Mersenne prime, for
+which modular reduction is easy, making it attractive from an
+implementation point of view. If we accept to use a partial FFT, which
+increases the cost of polynomial multiplication, we can use more moduli,
+e.g. 1279 (good up to degree 256 natively) or 127 (good up to degree
+128).
+
+Falcon itself is specified only with $q = 12289$, and the plain NTT is
+the way to go for that modulus. But the FFT in $\bF_{q^2}$, and its
+improved implementation \textsf{FFT-new}, can be useful for designing
+new schemes (or new parameter sets for Falcon) since they offer
+reasonably fast operations over additional moduli that help strike a
+better trade-off between object sizes (e.g. encoded public key) and
+security.
+
+% ----------------------------------------------------------------------
+
+\newpage
+\section{Falcon Tree Optimization}\label{sec:tree}
+
+While we primarily target RAM optimizations, we are also happy to reduce
+runtime cost. Floating-point values are both large (8 bytes each) and
+expensive, thus we would like to have fewer of them. The \emph{Falcon
+tree} is a structure that depends only on the private key; a
+speed-optimized implementation for an application where it is expected
+that many messages will be signed with the same key (e.g. a TLS server)
+will usually precompute the tree when the private key is loaded; in that
+case, the time taken to build this tree does not matter much (since the
+cost is amortized over many signatures), but the storage size could be
+important. On the other hand, a RAM-optimized implementation, in
+particular in the context of small embedded systems (for which RAM is
+usually a very scarce resource), will usually resort to dynamically
+generating the Falcon tree along with each signature, keeping in RAM at
+any point only the relevant parts of the tree (i.e. the path from the
+root to the particular leaf which is currently used). In this section,
+we present some optimization techniques that help in both cases.
+
+\subsection{\emph{1/X}-Adjoint Polynomials}
+
+The \textsf{FalconTreeTop} algorithm (algorithm~\ref{alg:FalconTreeTop})
+generates the root node of the Falcon tree, then uses
+\textsf{FalconTreeInner} (algorithm~\ref{alg:FalconTreeInner}) to build
+the left and right sub-trees. By construction, the parameter to
+\textsf{FalconTreeInner} is a self-adjoint polynomial $a$, which the
+algorithm splits: $(b, c) = \text{\textsf{split}}(a)$. As was previously
+noticed (see remark~\ref{remark:split-selfadj}), splitting a
+self-adjoint polynomial yields a self-adjoint and an $X$-adjoint
+polynomials, i.e. $\adj{b} = b$ and $\adj{c} = Xc$. Polynomial $\adj{c}$
+is itself $1/X$-adjoint, since $\adj{\adj{c}} = c = (1/X)Xc =
+(1/X)\adj{c}$. The root of the sub-tree returned by
+\textsf{FalconTreeInner} is the value $L = \adj{c}/b$, which is then an
+$1/X$-adjoint polynomial.
+
+Previous implementations of Falcon stored $L$ as a generic polynomial in
+FFT representation, using $m/2$ floating-point elements ($4m$ bytes) for
+an input polynomial $a \in \bR[X]/\Phi_m$ (the \textsf{split} operation
+then implies that $b$ and $c$, and thus $L$, have degree $m/2$).
+However, we can instead store $L/(1 + X)$, which is self-adjoint and
+requires only $m/4$ floating-point elements ($2m$ bytes). Algorithm
+\textsf{LDL-new} (algorithm~\ref{alg:ldl-new}) takes as input $a$
+(self-adjoint, FFT representation), splits it into $b$ (i.e.
+$a_{\text{even}}$) and $c$ (i.e. $a_{\text{odd}}$), then returns
+polynomials $d$ and $\lambda$ (both self-adjoint and in FFT
+representation) such that:
+\begin{eqnarray*}
+    d &=& b - c\adj{c}/b \\
+    \lambda &=& L/(1+X)
+\end{eqnarray*}
+for $L = \adj{c}/b$. This is mostly what \textsf{FalconTreeInner}
+computes, except for the specific representation of $L$ as the
+self-adjoint polynomial $\lambda$.
+
+\begin{algorithm}
+    \caption{\ \ \textsf{LDL-new}\label{alg:ldl-new}}
+    \begin{algorithmic}[1]
+        \Require{$a \in \bR[X]/\Phi_m$ such that $a = \adj{a}$ (FFT,
+            half-size)}
+        \Ensure{$b$, $d = b - c\adj{c}/b$ and $\lambda = \adj{c}/(b(1+X))$ for
+            $(b, c) = \text{\textsf{split}}(a)$ (FFT, degree $m/2$, half-size)}
+        \For{$j = 0$ \textbf{to} $m/4 - 1$}
+            \State{$(x, y) \leftarrow (a[2j], a[2j + 1])$}
+            \State{$u \leftarrow (x + y)/2$}
+            \State{$v \leftarrow (x - y)R'[m/4 + j]$\Comment{Same
+                constants $R'[j]$ as in \textsf{invFFT-selfadj-new}.}}
+            \State{$\lambda[j] \leftarrow v / (u C[m/4 + j])$}
+            \State{$d[j] \leftarrow u - v \lambda[j]$}
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+In \textsf{LDL-new}, steps 2-4 represent $(b, c) =
+\text{\textsf{split}}(a)$, with $c$ being represented by $c' = (1+X)c$;
+then, variables $u$ and $v$ are equal to $b[j]$ and $c'[j]$,
+respectively ($b$ and $c'$ are self-adjoint). Then, we want:
+\begin{equation*}
+    \lambda = \frac{\adj{c}}{(1+X)b} = \frac{c'}{\adj{(1+X)}(1+X)b}
+        = \left(\frac{X}{(1+X)^2}\right)\frac{c'}{b}
+\end{equation*}
+Hence, the constant $C[m/4 + j]$ is equal to $(1+X)^2/X$ evaluated over
+the roots $\zeta$ of $\Phi_{m/2}$ (equivalenty, the roots $\zeta^2$ of
+$\Phi_m$) in the correct bit-reversal order, namely:
+\begin{equation*}
+    C[2^{\alpha - 1} + \text{\textsf{rev}}(\alpha - 1, j)]
+        = 2 + 2\cos((4j + 1)\pi/2^\alpha)
+\end{equation*}
+for $j = 0$ to $2^{\alpha - 1}$. To support Falcon up to degree
+$n = 2^\ell$, these constants must be
+precomputed for $\alpha$ up to $\ell - 1$ (since the largest $d$ and
+$\lambda$ are for degree $n/2$), for a total size of 4096 bytes for
+$n = 1024$ and using 64-bit floating-point values.
+
+When using the Falcon tree in \textsf{ffSampling}, the tree node value $L$
+must be multiplied with a generic polynomial, both being in FFT
+representation (algorithm~\ref{alg:ffSampling}, step 10). Since we do not
+have $L$, but $\lambda = L/(1+X)$, this multiplication is modified;
+algorithm \textsf{mul-iXadj} (algorithm~\ref{alg:mul-iXadj}) performs
+this operation.
+
+\begin{algorithm}
+    \caption{\ \ \textsf{mul-iXadj}\label{alg:mul-iXadj}}
+    \begin{algorithmic}[1]
+        \Require{$a \in \bR[X]/\Phi_m$ (FFT), $\lambda \in \bR[X]/\Phi_m$
+            such that $\adj{\lambda} = \lambda$ (FFT, half-size)}
+        \Ensure{$d = (1 + X)\lambda a$ (FFT)}
+        \For{$j = 0$ \textbf{to} $n/2 - 1$}
+            \State{$(x_r, x_i) \leftarrow (a[j], a[j + n/2])$}
+            \State{$y \leftarrow \lambda[j]$}
+            \State{$\theta = y C[n/2 + j]/2$\Comment{Same constants $C[j]$ as
+                in \textsf{LDL-new}}}
+            \State{$\delta = D[n/2 + j]$}
+            \State{$d[j] \leftarrow \theta(x_r + x_i \delta)$}
+            \State{$d[j + n/2] \leftarrow \theta(x_i - x_r \delta)$}
+        \EndFor
+    \end{algorithmic}
+\end{algorithm}
+
+This uses the constants $D[j]$ which are equal to
+$i(\zeta - 1)/(\zeta + 1)$ for the roots $\zeta$ of $\Phi_m$; in
+the appropriate bit-reversal order:
+\begin{eqnarray*}
+    D[2^{\alpha - 1} + \text{\textsf{rev}}(\alpha - 1, j)]
+        = \frac{-\sin((4j + 1)\pi/2^\alpha)}{1 + \cos((4j + 1)\pi/2^\alpha)}
+\end{eqnarray*}
+Again, the $D[]$ array size is 4096 bytes when supporting Falcon up to
+$n = 1024$ and using 64-bit floating-point values.
+
+\subsection{Symplecticity}
+
+Symplecticity is a geometric property fulfilled by Falcon
+trees\cite{SunZhoZhaTaoQiaMin2022}. It provides some useful relations
+between the left and right sub-trees of the root nodes; namely, the
+right sub-tree can be obtained from the left sub-tree by doing the
+following:
+\begin{itemize}
+    \item Negate all values ($L$) of intermediate nodes.
+
+    \item Exchange left and right children of each node.
+
+    \item Replace each leaf value $x$ with $q^2/x$.
+\end{itemize}
+If the Falcon tree is precomputed and stored in RAM, then these properties
+reduce both the storage size and the computational cost of building the
+tree; values of inner nodes of the right sub-tree need not be stored since
+they can be obtained by using the mirror nodes in the left sub-tree, with
+a very inexpensive negation, and the $n/2$ leaves of the right sub-tree
+are computed directly from the $n/2$ leaves of the left sub-tree.
+
+The storage cost of a full Falcon tree is then:
+\begin{itemize}
+
+    \item Top-level
+    $\text{\textsf{T.value}} = (F\adj{f} + G\adj{g})/(f\adj{f} + g\adj{g})$:
+    $n$ floating-point values.
+
+    \item Left sub-tree: $\ell - 1$ layers, each containing
+    $2^{\ell - 1 - \alpha}$ values $\lambda \in\bR[X]/\Phi_{2^\alpha}$
+    which are self-adjoint, for a total of $n/4$ floating-point values,
+    and $n/2$ leaves.
+
+    \item Right sub-tree: $n/2$ leaves (the inner nodes are omitted).
+\end{itemize}
+This means a total of $n(\ell + 7)/4$ floating-point values. If the
+values are 64-bit objects, then this means 16384 bytes (for $n = 512$)
+or 34816 bytes (for $n = 1024$).
+
+In our implementation, we try to achieve low RAM usage, and thus we do
+not precompute the Falcon tree; instead, we compute it dynamically,
+keeping only a single path in RAM at a time, which implies that we have
+to recompute the $L$ values in the right sub-tree. However, we can still
+leverage a consequence of symplecticity: the source value for the right
+sub-tree is the polynomial denoted $d$ in \textsf{FalconTreeTop}
+(algorithm~\ref{alg:FalconTreeTop}, step 8); this value is such that:
+\begin{eqnarray*}
+    (f\adj{f} + g\adj{g}) d
+      &=& (F\adj{F} + G\adj{G})(f\adj{f} + g\adj{g})
+        - (F\adj{f} + G\adj{g})(\adj{F}f + \adj{G}{g}) \\
+      &=& gF\adj{(gF)} + fG\adj{(fG)} - gF\adj{(fG)} - fG\adj{(gF)} \\
+      &=& (gF - fG)\adj{(gF - fG)} \\
+      &=& q^2
+\end{eqnarray*}
+by application of the NTRU equation. We can thus obtain the source
+value for the right sub-tree as $d = q^2/(f\adj{f} + g\adj{g}) = q^2/a$,
+with $a$ being the source value for the left sub-tree. Since $a$ is
+in FFT representation and is self-adjoint, we get $d$ with $n/2$
+divisions on floating-point values.
+
+An alternative way would be to specialize the left and right
+\textsf{FalconTreeInner} so that the dynamic reconstruction of the right
+sub-tree runs, in fact, the left sub-tree building and applies the
+symplectic negations and swaps, and the final divisions on the leaves.
+However, that would complicate the implementation (inner
+\textsf{ffSampling} calls would have to know whether they are exploring
+the left or right sub-tree); computing $d = q^2/a$ is simpler. Note that
+both methods involve the same number ($n/2$) of floating-point
+divisions.
+
+\subsection{Top-Level Polynomials}\label{toplevel-range}
+
+\textsf{FalconTreeTop} (algorithm~\ref{alg:FalconTreeTop}) computes the
+top-level tree value $L$, and invokes \textsf{FalconTreeInner} on two
+polynomials equal to $a = f\adj{f} + g\adj{g}$ and, as was pointed out
+above, $d = q^2/a$. The top-level tree value is $L = b/a$. We therefore
+need to compute the two polynomials $a$ and $b$. Note that both
+polynomials are integral; we can thus evaluate them over integers, and
+more precisely we compute $a$ and $b$ modulo $q = 12289$ and modulo $q'
+= 18433$, then assemble the resulting coefficients with the CRT to yield
+the result. This process works as long as the integer coefficients can
+be shown to be less than $qq'/2$ in absolute value. In this subsection,
+we establish the maximum range of coefficients of $a$ and $b$. We rely
+on two properties of valid Falcon private keys:
+\begin{eqnarray*}
+    \norminf{(F,G)} &\leq& 2^7 \\
+    \norm{(g, -f)} &\leq& 1.17\sqrt{q}
+\end{eqnarray*}
+The second property can also be expressed as follows:
+\begin{equation*}
+    \sum_{j=0}^{n-1} f[j]^2 + \sum_{j=0}^{n-1} g[j]^2 \leq 16822
+\end{equation*}
+
+Let's first consider $b = F\adj{f} + G\adj{g}$. For the purpose of range
+analysis, we can consider that all coefficients of $F$ and $G$ are equal
+to the upper bound of $\norminf{(F, G)}$, which is $2^7$; hence:
+\begin{eqnarray*}
+    \norminf{F\adj{f} + G\adj{g}} \leq 2^7 \sum_{j=0}^{n-1} (|f[j]| + |g[j]|)
+\end{eqnarray*}
+We thus want to upper bound the sum of the (absolute values) of
+coefficients of $f$ and $g$, under the condition that
+$\norm{(g,-f)}^2 \leq 16822$. The following lemma will be useful:
+
+\begin{lemma}\label{lemma:max-sum}
+Let $m \in\bN$. Let $S_m = \{ (x, y)\in\bN^2 \,|\, x^2 + y^2 \leq m \}$.
+Then the maximum value of $x + y$ for $(x, y)\in S_m$ is achieved for some
+integers $x$ and $y$ such that $|x - y|\leq 1$.
+\end{lemma}
+\begin{proof}
+Let $(x, y)\in S_m$ that maximizes $x + y$. If $y \geq x + 2$, then we
+define $(x', y') = (x + 1, y - 1)$. It holds that
+$x'^2 + y'^2 = x^2 + y^2 + 2(x - y) + 2 < x^2 + y^2$,
+therefore $(x', y')\in S_m$. However, $x' + y' = x + y$, thus $(x', y')$
+is also a maximizing pair. Applying this process repeatedly, we can find
+a pair $(x'', y'')\in S_m$ such that $|x'' - y''| \leq 1$ that
+also maximizes the sum $x'' + y''$.\qed
+\end{proof}
+
+For any pair $(f,g)$ of polynomials that fulfills the condition
+$\norm{(g,-f)}^2 \leq 16822$, we can consider the smallest and largest of
+the $2n$ coefficients (in absolute value); if the difference between the
+two is 2 or more, then we can apply lemma~\ref{lemma:max-sum} and obtain
+another pair $(f',g')$ which is almost identical to $(f,g)$ except that
+the two aforementioned coefficients have been replaced with values $(x,
+y)$ such that $|x - y|\leq 1$, without changing the total sum
+$\sum_{j=0}^{n-1} (|f[j]| + |g[j]|)$, and still complying with the
+condition on $\norm{(g,-f)}$. Doing so repeatedly shows that under that
+condition, $\sum_{j=0}^{n-1} (|f[j]| + |g[j]|)$ can be maximized when all
+coefficients of $f$ and $g$ are equal to either $x$ or $x+1$ for some
+integer $x$.
+
+We can thus write that:
+\begin{equation*}
+    \norminf{F\adj{f} + G\adj{g}} \leq 2^7 ((2n - m) x + m (x + 1))
+\end{equation*}
+for some integers $m\in [0, 2n-1]$ and $x$ which are such that $(2n - m)
+x^2 + m (x + 1)^2 \leq 16822$. Note that $(2n - m) x + m(x + 1) = 2nx +
+m$, which is maximized for any given $x$ when $m$ is maximized, under
+the constraint that $(2n - m) x^2 + m (x + 1)^2 \leq 16822$, which means
+that we need $m \leq (16822 - 2nx^2)/(2x + 1)$. Trying increasing values
+of $x$ until there is no matching $m$, we can easily enumerate the
+largest possible value for $(2n - m) x + m (x + 1)$, which is 5822 for
+$n = 1024$, and 4144 for $n = 512$ (this upper bound is smaller for lower
+degrees). Correspondibly, this demonstrates that:
+\begin{equation*}
+    \norminf{F\adj{f} + G\adj{g}} \leq 5822\cdot 2^7 = 745216
+\end{equation*}
+which is both lower than $qq'/2$ (hence we can find the correct value
+of $F\adj{f} + G\adj{g}$ by working only modulo $q$ and modulo $q'$),
+and lower than $2^{22}$, which implies that $F\adj{f} + G\adj{g}$ is
+an adequate input to algorithm \textsf{FFT-new} with 32-bit integers
+(see section~\ref{sec:fft-new-range}).
+
+For $a = f\adj{f} + g\adj{g}$, we can prove a tighter range, using
+the following lemma:
+\begin{lemma}\label{lemma:ffa-norm}
+For any polynomial $f \in \bR[X]/\Phi_n$, $\norminf{f\adj{f}} = \norm{f}^2$.
+\end{lemma}
+\begin{proof}
+Let $k\in [1, n-1]$. A straightforward computation of $f\adj{f}$ shows
+that $f\adj{f}[k]$ is the sum of values $\pm f[j] \adj{f}[k - j]$, with
+the convention that $f[j - n] = -f[j]$ (which corresponds to reduction
+modulo $X^n + 1$). By definition of the adjoint,
+$|\adj{f}[k - j]| = |f[j - k]|$. By triangular inequality, we have:
+\begin{equation*}
+    |f\adj{f}[k]| \leq \sum_{j=0}^{n-1} |f[j]| |f[j - k]|
+\end{equation*}
+For any reals $x$ and $y$, we have $x^2 + y^2 - 2xy = (x - y)^2 \geq 0$,
+thus $xy \leq (x^2 + y^2)/2$. Applying this rule to the sum above, we
+get:
+\begin{equation*}
+    |f\adj{f}[k]| \leq \sum_{j=0}^{n-1} \frac{f[j]^2 + f[j - k]^2}{2}
+\end{equation*}
+Each $f[j]^2$ appears exactly twice in the right-hand side sum, hence:
+\begin{equation*}
+    |f\adj{f}[k]| \leq \sum_{j=0}^{n-1} f[j]^2 = \norm{f}^2
+\end{equation*}
+for all $k\in [1, n-1]$. At index 0, the inequality becomes an equality:
+\begin{equation*}
+    f\adj{f}[0] = f[0]^2 - \sum_{j=1}^{n-1} f[j] \adj{f}[n - j]
+        = f[0]^2 + \sum_{j=1}^{n-1} f[j]^2 = \norm{f}^2
+\end{equation*}
+which completes the proof.\qed
+\end{proof}
+
+From lemma~\ref{lemma:ffa-norm}, we get that:
+\begin{equation*}
+    \norminf{f\adj{f} + g\adj{g}} \leq \norminf{f\adj{f}} + \norminf{g\adj{g}}
+        = \norm{f}^2 + \norm{g}^2 = \norm{(g,-f)}^2
+\end{equation*}
+Thus, all coefficients of $f\adj{f} + g\adj{g}$ are at most 16822 (in
+absolute value).
+
+If we had $q' > 2\cdot 16822$, then we could compute $f\adj{f} +
+g\adj{g}$ modulo $q'$ only; it would be sufficient. However, that would
+require $q' > 33644$ (next prime appropriate for the NTT at $n = 1024$
+is 40961), and there are computational advantages to sticking to a
+modulus lower than $2^{15} = 32768$ (in particular, this makes it easier
+to use some SIMD instructions of the Arm Cortex M4 such as \verb+smulbb+
+which work only with \emph{signed} 16-bit operands). We will therefore
+use $q' = 18433$ and compute $f\adj{f} + g\adj{g}$ modulo $q$ and modulo
+$q'$. The reconstruction of each coefficient as a plain integer is
+easier than with the CRT, though. Suppose that for a given index $j$, we
+obtain the coefficient modulo $q$ as a value that normalizes as $x \in
+[-q/2, +q/2]$, and similarly the same coefficient modulo $q'$ normalizes
+as $y \in [-q'/2, +q'/2]$. If $x = y$, $x = y + q$ or $x = y - q$, then
+$x$ agrees with $y$, which is the value of the coefficient as an
+integer. Otherwise, the value $y$ must be adjusted: if $y < 0$, then the
+correct value is $y + q'$, otherwise the correct value is $y - q'$.
+These operations are easy and inexpensive to apply. Moreover, if we have
+to compute $f\adj{f} + g\adj{g}$ twice (we will see that this is the
+case in our implementation, for RAM-saving reasons), then we can
+remember whether an adjustment to the value of the coefficient modulo
+$q'$ was needed, and the second time we only compute the polynomial
+modulo $q'$ and apply the adjustement based on the sign of each value.
+The storage space for such remembering is small ($n$ bits, i.e. $n/8$
+bytes); in our implementation, we store that bitfield temporarily in the
+output buffer for the signature.
+
+% ----------------------------------------------------------------------
+
+\newpage
+\section{Signature Generation Optimization}\label{sec:genopt}
+
+\subsection{Optimization Techniques}
+
+We here present the main techniques we use to achieve a small RAM usage,
+as well as better performance on Arm Cortex M4 CPUs. The following ideas
+are used:
+\begin{itemize}
+
+    \item Use \textsf{FFT-new} instead of \textsf{FFT-classic}.
+
+    \item Perform computations on integer polynomials using modular
+    integers, working modulo $q = 12289$ and $q' = 18433$.
+
+    \item Build the Falcon tree dynamically, working only with
+    self-adjoint polynomials (which use only half the storage space),
+    as described in the previous section.
+
+    \item Use only the fractional part of the input to \textsf{ffSampling}.
+    Moreover, that input can be injected later in the process, at the
+    leaf level in the Falcon tree rather than at the start, which avoids
+    some FFTs.
+
+    \item Record sampled integers as returned by \textsf{SamplerZ} and
+    use these values to compute the signature, rather than the final
+    polynomial returned by \textsf{ffSampling}. This removes the need to
+    run an inverse FFT. In fact, \textsf{invFFT-new} is not used at all
+    in our implementation.
+
+\end{itemize}
+
+\paragraph{Fractional Input.}
+A well-known property of \textsf{ffSampling} is that it preserves the
+integral part of its input (\cite{AlmFouLacPre2026}, lemma 9): if we
+consider a Falcon tree $\text{\textsf{T}}$, a given state for the
+pseudorandom generator used in \textsf{SamplerZ}, and an input
+$\mathbf{t} = (t_0, t_1)$, yielding $\mathbf{z} =
+\text{\textsf{ffSampling}}(\mathbf{t}, \text{\textsf{T}})$, then for any
+$\mathbf{k} = (k_0, k_1) \in (\bZ[X]/\Phi_n)^2$,
+$\text{\textsf{ffSampling}}(\mathbf{t} + \mathbf{k}, \text{\textsf{T}})$
+should return $\mathbf{z} + \mathbf{k}$ with the same $\mathbf{z}$ if
+the same pseudorandom generator state is used. We can thus split the
+input into an integral and a fractional parts, perform the sampling on
+the fractional part only, then add back the integral part afterwards.
+In Falcon signature generation, the input vector is $(t_0, t_1) =
+(-cF/q, cf/q)$; we can split $cf/q = (cf \bmod q)/q + (cf - (cf \bmod
+q))/q$, the second part being integral. We will thus run
+\textsf{ffSampling} on $((-cF \bmod q)/q, (cf \bmod q)/q)$.
+
+\paragraph{Late Addition.}
+Algorithm \textsf{ffSampling} only repeatedly splits its input, and
+splitting (in coefficient representation) is a data routing operation,
+i.e. it does not actually modify the coefficient values. In
+algorithm~\ref{alg:ffSampling} (step 10), the polynomial $t'_0$ is
+obtained by \emph{adding} $(t_1 - z_1)L$ (produced by the previous
+sampling steps) to the input $t_0$; addition commutes with splitting,
+thus we can delay this addition until it is really needed, which is at
+the leaf level. In other words, instead of computing $(t_0, t_1)$ and
+passing it as parameter to \textsf{ffSampling}, we can run
+\textsf{ffSampling} on $(0, 0)$ and add coefficients of $((-cF \bmod
+q)/q, (cf \bmod q)/q)$ only at the point where \textsf{SamplerZ} is
+called (algorithm~\ref{alg:ffSampling}, steps 3 and 4). We keep $-cF
+\bmod q$ and $cf \bmod q$ as arrays of 16-bit signed values ($2n$ bytes
+each); as is usual in splitting-based algorithms, these coefficients are
+consumed in bit-reversal order. The division by $q$, and conversion to
+floating-point, is only done at that point. This late addition has the
+benefit of avoiding an FFT computation: the FFT representation of 0 is
+0. We can also skip some of the computations in \textsf{ffSampling} by
+propagating a flag that indicates that the input value is statically
+known to be 0 at this point. Apart from the obvious speed benefits (not
+running the FFT is always faster than running it), this also saves some
+RAM space because applying the FFT on a degree-$n$ polynomial returns it
+as $8n$ bytes (with 64-bit floating-point elements), while working
+modulo $q$ only needs $2n$ bytes.
+
+\paragraph{Signature Building.}
+The Gaussian sampler \textsf{SamplerZ} produces integer values
+(algorithm~\ref{alg:ffSampling}, steps 3 and 4); these values are
+ultimately assembled into the vector $\mathbf{z} = (z_0, z_1)$ and the
+overall \textsf{ffSampling} algorithm returns $\mathbf{z}$, normally in
+FFT representation, which the caller subtracts from the input
+$\mathbf{t}$. Using this vector entails performing an inverse FFT at
+some point. However, we can also discard it entirely; instead, we can
+record the coefficients of the sampled $z_0$ and $z_1$ in an alternate
+buffer (for instance, the same buffer that provides the coefficients of
+$-cF \bmod q$ and $cf \bmod q$ can be used to receive the sampled $z_0$
+and $z_1$). The signature value is ultimately computed as:
+\begin{eqnarray*}
+    \mathbf{s} &=& (\mathbf{t} - \mathbf{z})\mathbf{B} \\
+        &=& \mathbf{t}\mathbf{B} - \mathbf{z}\mathbf{B} \\
+        &=& (c - g z_0 - G z_1, f z_0 + F z_1)
+\end{eqnarray*}
+These polynomials are all integral, hence we can compute the signature
+by working modulo $q$ or modulo $q'$.
+
+\paragraph{Merged Tree Building and Sampling.}
+Using the techniques above, we merge the dynamic Falcon tree building
+and the Fourier sampling into algorithm \textsf{ffTreeSampling}
+(algorithm~\ref{alg:ffTreeSampling}). It takes as input polynomials $t$
+and $a$, both from $\bR[X]/\Phi_m$; $a$ is self-adjoint and represents
+the input to \textsf{FalconTreeInner}, while $t$ is the input to
+\textsf{ffSampling} (before splitting).
+
+\begin{algorithm}
+    \caption{\ \ \textsf{ffTreeSampling}\label{alg:ffTreeSampling}}
+    \begin{algorithmic}[1]
+        \Require{$t \in \bR[X]/\Phi_m$ (FFT), $a \in \bR[X]/\Phi_m$
+            (FFT, self-adjoint, half-size), I/O state $W$}
+        \Ensure{$u = t - z \in \bR[X]/\Phi_m$ (FFT)}
+        \If{$m = 2$}
+            \State{$\sigma' \leftarrow \sigma_n/\sqrt{a[0]}$
+                \Comment{Leaf normalization step.}}
+            \State{$(e_0, e_1) \leftarrow \text{\textsf{next-input}}(W)$}
+            \State{$z_0 \leftarrow \text{\textsf{SamplerZ}}(t[0] + e_0)$
+                \Comment{Late addition of input coefficient.}}
+            \State{$u[0] \leftarrow t[0] - z_0$}
+            \State{$z_1 \leftarrow \text{\textsf{SamplerZ}}(t[1] + e_1)$
+                \Comment{Late addition of input coefficient.}}
+            \State{$u[1] \leftarrow t[1] - z_1$}
+            \State{$\text{\textsf{push-sample}}(W, z_0, z_1)$
+                \Comment{Sampled integers are saved.}}
+        \Else
+            \State{$(t_0, t_1) \leftarrow \text{\textsf{split}}(t)$}
+            \State{$(b, d, \lambda) \leftarrow \text{\textsf{LDL-new}}(a)$}
+            \State{$u_1 \leftarrow \text{\textsf{ffTreeSampling}}(t_1, d, W)$
+                \Comment{$u_1 = t_1 - z_1$}}
+            \State{$v_1 \leftarrow \text{\textsf{mul-iXadj}}(u_1, \lambda)$
+                \Comment{$v_1 = (t_1 - z_1)L$}}
+            \State{$t'_0 \leftarrow t_0 + v_1$
+                \Comment{$v_1 = t'_0 - t_0$}}
+            \State{$v_0 \leftarrow \text{\textsf{ffTreeSampling}}(t'_0, b, W)$
+                \Comment{$v_0 = t'_0 - z_0$}}
+            \State{$u_0 \leftarrow v_0 - v_1$
+                \Comment{$u_0 = t_0 - z_0$}}
+            \State{$u \leftarrow \text{\textsf{merge}}(u_0, u_1)$
+                \Comment{$u = t - z$}}
+        \EndIf
+        \State{\Return{$u$}}
+    \end{algorithmic}
+\end{algorithm}
+
+The running state $W$ encapsulates an input/output buffer $w$ for 16-bit
+values, and a counter $k$. Initially, the buffer contains the
+coefficient of the fractional additional input (e.g. $cf \bmod q$) and
+the counter is set to $n/2 = 2^{\ell - 1}$; each invocation of
+\textsf{next-input} (algorithm~\ref{alg:next-input}) returns two values
+from the buffer, while each invocation of \textsf{push-sample}
+(algorithm~\ref{alg:push-sample}) receives two sampled integers that
+replace the two previously returned values in the buffer.
+
+\begin{algorithm}
+    \caption{\ \ \textsf{next-input}\label{alg:next-input}}
+    \begin{algorithmic}[1]
+        \Require{$W = (w, k)$ (buffer $w$, counter $k$)}
+        \Ensure{$(e_0, e_1)$; $k$ is updated}
+        \State{$k \leftarrow k - 1$}
+        \State{$j \leftarrow \text{\textsf{rev}}(\ell - 1, k)$}
+        \State{\Return $(w[j]/q, w[j + n/2]/q)$}
+    \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+    \caption{\ \ \textsf{push-sample}\label{alg:push-sample}}
+    \begin{algorithmic}[1]
+        \Require{$W = (w, k)$ (buffer $w$, counter $k$), integers $(z_0, z_1)$}
+        \Ensure{$w$ is updated}
+        \State{$j \leftarrow \text{\textsf{rev}}(\ell - 1, k)$}
+        \State{$w[j] \leftarrow z_0$}
+        \State{$w[j + n/2] \leftarrow z_1$}
+    \end{algorithmic}
+\end{algorithm}
+
+\subsection{Full Signing Procedure}
+
+Putting these techniques together, we obtain the following signature
+generation process:
+\begin{enumerate}
+    \item Compute the message representative $\mu$, generate the random
+    seed $r$, and sample the polynomial $c\in \bZ_q[X]/\Phi_n$.
+
+    \item Compute $a = f\adj{f} + g\adj{g}$ by working modulo $q$ and
+    modulo $q'$, and rebuild its plain integer coefficients (as
+    shown in section~\ref{toplevel-range}, these coefficients are
+    in $[-16822, +16822]$ and thus only need 2 bytes each).
+
+    \item Convert $a$ to FFT with \textsf{FFT-selfadj-new}, then
+    compute $d = q^2/a$ (coefficient-wise floating-point division, since
+    we operate on the FFT representation).
+
+    \item Compute $w = cf \bmod q$, normalized to coefficients in
+    $[-q/2, +q/2]$, and set counter $k = n/2$. $w$ and $k$ are the
+    two components of state $W$.
+
+    \item Run $\text{\textsf{ffTreeSampling}}(0, d, W)$. This yields
+    $u_1 = t_1 - z_1$. Note that we provided only a fractional input
+    ($(cf \bmod q)/q$, not the full $cf/q$) but the missing integral
+    parts cancel out in $u_1$ (we virtually subtract the same integral
+    polynomial from both $t_1$ and $z_1$).
+
+    \item Save $z_1$ (currently stored in $w$) into another buffer.
+
+    \item Compute $G$ from the NTRU equation ($G = gF/f \bmod q$) then
+    $b = F\adj{f} + G\adj{g}$ (modulo $q$ and modulo $q'$, then
+    reassembled as plain 32-bit integers), which is then converted to
+    FFT representation and multiplied with $t_1 - z_1$.
+
+    \item Recompute $a = f\adj{f} + g\adj{g}$, first as integers, then
+    converted to FFT. This value was already computed previously but we
+    did not keep it for RAM-saving reasons. As pointed out previously,
+    this recomputation can be done modulo $q'$ if we remember which
+    coefficients modulo $q'$ had to be adjusted to yield the plain
+    integer value.
+
+    \item Divide the value $(t_1 - z_1)(F\adj{f} + G\adj{g})$ by
+    $f\adj{f} + g\adj{g}$. Both polynomials are in FFT representation
+    and $f\adj{f} + g\adj{g}$ is self-adjoint, so this uses only
+    $n/2$ floating-point inversions. This yields $(t_1 - z_1)L$ (in FFT
+    representation).
+
+    \item Set $w$ to $-cF \bmod q$, normalized to coefficients in
+    $[-q/2, +q/2]$, and reset $k$ to value $n/2$.
+
+    \item Run $\text{\textsf{ffTreeSampling}}((t_1 - z_1)L, a, W)$.
+    We discard the returned value; only $z_0$ (now in buffer $w$)
+    will be used afterwards.
+
+    \item Build the second part of the signature $s_1 = f z_0 + F z_1$.
+    We do not actually have $z_0$ and $z_1$, since the sampling was
+    performed over the fractional parts; we really have obtained
+    $z'_0$ and $z'_1$ such that:
+    \begin{eqnarray*}
+        z_0 &=& \frac{-cF - (-cF \bmod q)}{q} + z'_0 \\
+        z_1 &=& \frac{cf - (cf \bmod q)}{q} + z'_1
+    \end{eqnarray*}
+    This alters the signature computation as follows:
+    \begin{eqnarray*}
+        s_1 &=& \left(z'_0 + \frac{-cF}{q} - \frac{-cF \bmod q}{q}\right) f
+                + \left(z'_1 + \frac{cf}{q} - \frac{cf \bmod q}{q}\right) F \\
+            &=& f z'_0 + f \frac{(cF \bmod q)}{q}
+                + F z'_1 - F \frac{(cf \bmod q)}{q}
+    \end{eqnarray*}
+    Note that $s_1$ is integral, hence we can perform that computation
+    modulo $q'$; the division by $q$ is then a multiplication by the
+    inverse of $q$ modulo $q'$. Working modulo $q'$ is sufficient since
+    a valid signature is small ($\norminf{s_1} \leq 840$), hence there
+    is no loss of information.
+
+    \item Once $s_1$ is recomputed, the signature verification process is
+    performed; this is easier than recomputing $s_0 = c - g z_0 - G z_1$,
+    and it more obviously matches what verifiers will compute. The
+    verification process needs the public polynomial $h$, which is
+    recomputed as $h = g/f \bmod q$ at this point.
+
+    \item If the verification succeeds ($\norm{(s_0, s_1)}$ and
+    $\norminf{(s_0, s_1)}$ are low enough) and the signature $s_1$ is
+    successfully encoded into bytes within the expected output signature
+    size, then a success is reported. Otherwise, the whole process starts
+    again ($\mu$ is reused, but a new seed $r$ is generated, hence a new
+    polynomial $c$).
+
+\end{enumerate}
+
+The entire procedure can fit in a RAM buffer of size $20n$ bytes (hence
+10 or 20 kilobytes, for $n = 512$ or $n = 1024$). In
+\textsf{ffTreeSampling} (algorithm~\ref{alg:ffTreeSampling}), the input
+uses $12n$ bytes ($8n$ bytes for $t$, $4n$ bytes for $a$, which is
+self-adjoint); when doing the first recursive invocation (step 12),
+values $t_0$ ($4n$ bytes), $b$ ($2n$ bytes) and $\lambda$ ($2n$ bytes)
+must be retained, while for the second recursive invocation (step 15),
+values $u_0$ ($4n$ bytes) and $v_1$ ($4n$ bytes) must be retained. In
+both cases, the function must reserve $8n$ bytes before calling itself
+recursively at half-degree; this leads to a RAM usage of $16n$ bytes by
+\textsf{ffTreeSampling}. On top of that, we need two $2n$-byte buffers
+for providing the additional input ($-cF \bmod q$, $cf \bmod q$) and
+receiving $z_0$ and $z_1$, hence the total RAM usage of $20n$ bytes.
+
+\subsection{Precision}\label{sec:precision}
+
+As pointed out before, both the Falcon tree building and the signature
+generation are formally expressed over polynomials in $\bQ[X]/\Phi_n$,
+whose exact value can be computed, though this is expensive since the
+denominators are huge. Practical implementations of Falcon use
+approximations, with floating-point or fixed-point values. The Falcon
+security analysis shows that security is maintained as long as the
+approximations are ``good enough'', specifically in the inputs to the
+\textsf{SamplerZ} algorithm. Each \textsf{SamplerZ} invocation uses as
+parameters a centre $x$ and a width $\sigma'$, and returns an integer
+sampled along a Gaussian distribution centred on $x$ with standard
+deviation $\sigma'$.
+
+In order to estimate how precise our implementation is, we generated 100
+signatures with random keys (for both $n = 512$ and $n = 1024$) using
+our new implementation. We also generated the same signatures with the
+``standard'' implementation, using the same private keys and
+pseudorandom seeds, thus resulting in the exact same signature values.
+Finally, we computed the mathematically exact rational values for the
+inputs to \textsf{SamplerZ} (using a perfunctory Python/Sage
+implementation\footnote{At $n = 1024$, this Sage implementation takes
+close to 5 minutes to compute one signature, which highlights how
+expensive the process is, and why using approximations is necessary.}),
+in order to measure how much the two implementations deviate from the
+``perfect'' values. At degree $n$, $2n$ centres $x$ and $n$ widths
+$\sigma'$ are computed:
+\begin{itemize}
+
+    \item For $j = 0$ to $2n - 1$, if the measured centre is $x[j]$, and
+    the mathematically exact centre is $x_e[j]$, then the deviation is
+    $|x[j] - x_e[j]|$.
+
+    \item For $j = 0$ to $n - 1$, if the measured width is $\sigma'[j]$,
+    and the mathematically exact width is $\sigma'_e[j]$, then the deviation
+    is $|\sigma'[j]/\sigma'_e[j] - 1|$.
+
+\end{itemize}
+Averages of the deviations, for each index $j$, over 100 signatures and
+with both the ``standard'' and the new implementations are shown on
+figures~\ref{fig:deviations-512} (for $n = 512$) and
+\ref{fig:deviations-1024} (for $n = 1024$). Average values are reported
+in base-2 logarithmic scale.
+
+\begin{figure}
+    \begin{tikzpicture}
+        \begin{axis}[
+            enlargelimits=false,
+            xlabel={Index $j$ (sampling order)},
+            ylabel={$\log_2 |x[j] - x_e[j]|$},
+            width=0.48\textwidth,
+            height=0.48\textwidth,
+        ]
+            \addplot[
+                only marks,
+                mark=+,
+                color=red,
+                mark size=2pt]
+            table[meta=dev]{stats_REF512_centre.dat};
+            \addplot[
+                only marks,
+                mark=+,
+                color=blue,
+                mark size=2pt]
+            table[meta=dev]{stats_NEW512_centre.dat};
+        \end{axis}
+    \end{tikzpicture}
+    \hspace{0.04\textwidth}
+    \begin{tikzpicture}
+        \begin{axis}[
+            enlargelimits=false,
+            xlabel={Index $j$ (sampling order)},
+            ylabel={$\log_2 |\sigma'[j]/\sigma'_e[j] - 1|$},
+            width=0.48\textwidth,
+            height=0.48\textwidth,
+        ]
+            \addplot[
+                only marks,
+                mark=+,
+                color=red,
+                mark size=2pt]
+            table[meta=dev]{stats_REF512_width.dat};
+            \addplot[
+                only marks,
+                mark=+,
+                color=blue,
+                mark size=2pt]
+            table[meta=dev]{stats_NEW512_width.dat};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{\label{fig:deviations-512}Average deviations of centres
+    $x$ and widths $\sigma'$ from exact values of the ``standard'' (red)
+    and new (blue) implementations ($n = 512$).}
+\end{figure}
+
+\begin{figure}
+    \begin{tikzpicture}
+        \begin{axis}[
+            enlargelimits=false,
+            xlabel={Index $j$ (sampling order)},
+            ylabel={$\log_2 |x[j] - x_e[j]|$},
+            width=0.48\textwidth,
+            height=0.48\textwidth,
+        ]
+            \addplot[
+                only marks,
+                mark=+,
+                color=red,
+                mark size=2pt]
+            table[meta=dev]{stats_REF1024_centre.dat};
+            \addplot[
+                only marks,
+                mark=+,
+                color=blue,
+                mark size=2pt]
+            table[meta=dev]{stats_NEW1024_centre.dat};
+        \end{axis}
+    \end{tikzpicture}
+    \hspace{0.04\textwidth}
+    \begin{tikzpicture}
+        \begin{axis}[
+            enlargelimits=false,
+            xlabel={Index $j$ (sampling order)},
+            ylabel={$\log_2 |\sigma'[j]/\sigma'_e[j] - 1|$},
+            width=0.48\textwidth,
+            height=0.48\textwidth,
+        ]
+            \addplot[
+                only marks,
+                mark=+,
+                color=red,
+                mark size=2pt]
+            table[meta=dev]{stats_REF1024_width.dat};
+            \addplot[
+                only marks,
+                mark=+,
+                color=blue,
+                mark size=2pt]
+            table[meta=dev]{stats_NEW1024_width.dat};
+        \end{axis}
+    \end{tikzpicture}
+    \caption{\label{fig:deviations-1024}Average deviations of centres
+    $x$ and widths $\sigma'$ from exact values of the ``standard'' (red)
+    and new (blue) implementations ($n = 1024$).}
+\end{figure}
+
+The main observation is that the new implementation consistently
+achieves better or at least as good precision as the ``standard'' code.
+The precision of the ``standard'' code is already deemed good enough for
+the Falcon scheme security goals, with deviations not being exploitable
+for attacks within the target security levels; in a sense, it is not
+possible to do better than that. However, we can still claim that the
+new implementation is also secure, and might have a bit more margin for
+alternate ways to compute values.
+
+Why the new implementation seems to have better precision is not
+entirely clear, but it is probably due to a combination of these
+factors:
+\begin{itemize}
+
+    \item Sampling over only the fractional domain implies that the
+    centres provided to \textsf{SamplerZ} are lower (in absolute value),
+    which, in floating-point formats, means that more bits are available
+    for the fractional part.
+
+    \item Computing the input for building the right Falcon sub-tree as
+    $d = q^2/(f\adj{f} + g\adj{g})$ entails use of smaller intermediate
+    values than the ``standard'' method that uses $F\adj{f} + G\adj{g}$
+    and $F\adj{F} + G\adj{G}$, the latter having somewhat large
+    coefficients. This, in particular, should explain why the
+    ``standard'' implementation has relatively poor precision for the
+    sampling widths in the first half of the process (when the right
+    sub-tree is used).
+
+    \item The late addition of inputs $(cf \bmod q)/q$ and $(-cF \bmod
+    q)/q$ means that these values do not go through a FFT and inverse,
+    and thus do not accumulate errors; at the point that they are added
+    to the inputs of \textsf{SamplerZ}, they have the maximum possible
+    precision that the floating-point format can support.
+
+    \item Generally speaking, floating-point operations return
+    approximate values, and errors tend to accumulate; the new
+    implementation does fewer floating-point operations, thus
+    entailing less error accumulation.
+
+\end{itemize}
+
+\subsection{Reproducibility and Random Hedging}\label{sec:hedging}
+
+As figures~\ref{fig:deviations-512} and \ref{fig:deviations-1024} make
+explicit, our new implementation produces centres and widths that are
+not exactly the same values as the centres and widths generated by the
+``standard'' implementation. In that case, it is unavoidable that even
+if using the same pseudorandom seeds for sampling, the two
+implementations may diverge: \textsf{SamplerZ} uses rejection sampling,
+which necessarily has threshold effects. If a sampled value is below the
+threshold for one implementation, but over the threshold for another
+implementation for whom the threshold is slightly different, then a
+divergence occurs.
+
+To estimate how often divergences occur, we generated one million Falcon
+key pairs (at $n = 512$) and computed one signature with each key, with
+both the ``standard'' and the new implementations, using identical
+seeds. The generated signatures were identical in all cases except 124,
+which means that divergences occur at a rate of about $1/8000$, which
+interestingly matches the rate observed by \cite{AlmFouLacPre2026}.
+Within \textsf{SamplerZ}, the main threshold effect is in the split of
+the centre into integral and fractional parts: if the mathematically
+exact value is an integer, then each implementation will return an
+approximation which may be slightly above or below that integer, the two
+cases leading to diverging sampling processes. In the 124 observed
+divergences, 121 were in that case, all in either the first two or last
+two invocations of \textsf{SamplerZ}. 3 of the divergences, however,
+were for centres not particularly near an integer, and came from the
+rejecting sampling itself.
+
+The combination of user-provided pseudorandom seeds and divergences
+that, while uncommon, still observationally happen, is dangerous: if two
+distinct implementations happen to use the same private key over the
+same message and with the same seed, and they hit a divergence, then the
+observation of the resulting signatures may reveal some information on
+the private key. To avoid this issue, our new implementation processes
+the user-provided seed in a different way. Namely, for a user-provided
+random seed $\rho$, an internal 40-byte seed is derived with value
+$H(\text{\textsf{id}} \parallel H(f \parallel g) \parallel \mu \parallel
+\rho)$, with $H$ being SHAKE256 (with a 40-byte output), $f$ and $g$
+being injected as encoded in the private key, and \textsf{id} being a
+conventional fixed string\footnote{This process is in file
+\texttt{sign.c}, function \texttt{make\_seedbuf()}.}. In the
+``standard'' implementation, \textsf{id} is the empty string; in the new
+implementation, it is an 8-byte fixed string. The use of such hashing,
+combining the input seed with the private key and the message
+representative, is an instance of ``randomness hedging'' and is
+considered good security engineering (it maintains security even if the
+source of randomness that produced the input seed is of poor quality).
+With a different label value in \textsf{id}, it also avoids the
+deleterious consequences of two implementations diverging on the same
+inputs.
+
+Of course, this different key derivation prevents reproducibility of
+test vectors; all the experiments conducted above, to measure precision
+and reproducibility, were performed with \textsf{id} set to the same
+value (the empty string) as the ``standard'' implementation. In the
+published code, the new implementation has its own \textsf{id} and
+\emph{none} of the test vectors from the ``standard'' code are
+reproduced. As explained above, this is needed for practical security if
+deployed applications use both the ``standard'' code and this new
+implementation with the same private keys, and inject fixed seeds (which
+is certainly not recommended, but may happen as long as the API that
+accepts an explicit seed exists).
+
+\subsection{Benchmarks}
+
+Within the course of writing our new implementation, we wrote some
+improved functions for computations in $\bZ_q[X]/\Phi_n$, leveraging
+SSE2 (on x86) and NEON (on aarch64) SIMD instructions, and using
+Montgomery's trick for inverting polynomials in NTT representation with
+a single inversion in $\bZ_q$. These optimizations were backported to
+the ``standard'' implementation, where they provide some relatively
+minor speed-ups.
+
+All our code is constant-time, within the limitations of such exercises
+in the presence of modern compilers\cite{Por2025-2}.
+
+\paragraph{RAM usage.}
+The ``standard'' code requires a temporary area of size $59n$ bytes;
+this is in addition to a stack space of slightly over 1~kB (stack usage
+depends on the used compiler). This translates to about 31~kB for $n =
+512$, 61~kB for $n = 1024$. The new implementation significantly
+improves on that, since it reduces the temporary area size to $20n$
+bytes; stack usage has also been slightly reduced (measured at 992 bytes
+on our Arm Cortex M4 test platform). In other words, we achieve a RAM
+usage of about \textbf{11~kB} (for $n = 512$) or \textbf{21~kB} (for $n
+= 1024$). Compared to the ``standard'' implementation, we divided RAM
+requirements by a factor of 3. This makes signature generation
+substantially more plausible on small embedded systems, including
+smartcards, were RAM resources are often very scarce. It may be noted
+that this RAM usage is now slightly below that of the key pair
+generation (at $22n$ bytes for the temporary area, and less than 1~kB of
+stack space).
+
+\paragraph{Speed.}
+The test x86 platform is an Intel Core i5-8259U (Coffee Lake, a Skylake
+variant) running at 2.3~GHz, in 64-bit mode. TurboBoost is disabled and
+the machine (running an up-to-date Ubuntu 24.04) is otherwise idle. The
+test aarch64 machine is a Raspberry Pi 5, with a Broadcom BCM2712 CPU
+(Arm Cortex-A76, 2.4~GHz); it also runs Ubuntu 24.04. For both machines,
+the C compiler is Clang 18.1.3, with optimization flags \verb+-O2+. The
+C code on x86 leverages SSE2 but not AVX2 opcodes\footnote{Some
+AVX2-specific code is used in key pair generation and in signature
+verification, but not in signature generation. Since the x86 ABI only
+guarantees presence of SSE2, use of AVX2 requires runtime testing of
+support, and code duplication, which is cumbersome from an engineering
+perspective. Right now, neither the ``standard'' code nor the new
+implementation use AVX2 for signature generation; using AVX2 would
+presumably speed things up for both, though it would not make the whole
+process twice faster, since at least \textsf{SamplerZ} is
+non-parallel.}. To represent embedded systems, we use an STM32F407VGT6
+microcontroller (Arm Cortex M4F core); the code is uploaded in the SRAM
+block, while the data and stack are located in the CCM area: this
+specific setup allows more efficient loading of the code (with no Flash
+writes, thus avoiding wearing out the Flash chip) and, more importantly,
+running at 168~MHz with no wait states, which speeds up long-running
+benchmarks. The Arm Cortex M4F code is mostly in C (compiled with GCC
+13.2.1) but with some routines in hand-optimized assembly, in particular
+the floating-point operations, as well as the NTT and inverse NTT modulo
+$q$ and modulo $q'$. The recursive call in \textsf{ffTreeSampling} is
+also written in assembly in order to reduce the amount of stack space
+consumed in the recursion.
+
+Table~\ref{tab:speed} shows the achieved speed, expressed in
+average clock cycle count for generating a signature, on the three
+platforms, with both standard degrees ($n = 512$ and $n = 1024$) and
+both implementations.
+
+\begin{table}
+    \begin{center}
+        {\renewcommand{\arraystretch}{1.1}%
+        \setlength{\tabcolsep}{1em}%
+        \begin{tabular}{|l|r|r|r|r|}
+            \hline
+            \textsf{\textbf{Platform}}
+            & \multicolumn{2}{c|}{\textsc{Falcon}-512}
+            & \multicolumn{2}{c|}{\textsc{Falcon}-1024} \\
+            \cline{2-5}
+            & \multicolumn{1}{c|}{standard}
+            & \multicolumn{1}{c|}{new code}
+            & \multicolumn{1}{c|}{standard}
+            & \multicolumn{1}{c|}{new code} \\
+            \hline
+            x86 (64-bit, SSE2)     &   872000 &  1023000 &  1759000 &  2064000 \\
+            aarch64 (64-bit, NEON) &   823000 &  1045000 &  1660000 &  2113000 \\
+            Arm Cortex M4 (32-bit) & 17020000 & 13450000 & 36570000 & 28580000 \\
+            \hline
+        \end{tabular}}
+    \end{center}
+    \caption{\label{tab:speed}Speed benchmarks of the ``standard''
+    and new implementations.}
+\end{table}
+
+We can observe that the new code is slightly slower than the
+``standard'' implementation on large CPUs with efficient hardware
+support for floating-point operations (cost is increased by 17\% on x86,
+27\% on aarch64); on Arm Cortex M4, though, the reverse happens: the new
+code is faster (cost is reduced by 21\%). The new code performs fewer
+floating-point operations, but many more integer computations (modulo
+$q$ and $q'$), so the overall performance depends on the relative cost
+of floating-point and integer operations on the involved hardware. In
+our new code, there are no fewer that 22 NTTs (12 modulo $q$, 10 modulo
+$q'$) and 12 inverse NTTs (8 modulo $q$, 4 modulo $q'$); we also need to
+invert $f$ modulo $q$ twice, and the message representative is derived
+into polynomial $c$ three times. These large numbers of operations are
+due to the optimization for space, that prevents us from caching
+intermediate values across calls to \textsf{ffTreeSampling}. On the
+other hand, there are only 3 FFTs, two of which being
+\textsf{FFT-selfadj-new} (for $f\adj{f} + g\adj{g}$, which is computed
+twice), and no inverse FFT at all.
+
+On Arm Cortex M4, the expensive floating-point operations are additions,
+combined addition-subtractions, multiplications, divisions and square
+roots, all of which being implemented with hand-optimized assembly
+routines (constant-time). A signature generation at $n = 512$ involves
+on average 29416 additions, 13322 combined addition-subtractions, 48601
+multiplications, 2817 divisions, and 512 square roots; for additions,
+addition-subtractions and multiplications, this is less than half the
+numbers on the ``standard'' code. In total, these floating-point
+operations account for about 6.6 million cycles, i.e. slightly less than
+half of the total cost (in the ``standard'' implementation, they make up
+to 66\% of the cost). Presumably, a fixed-point implementation would
+reduce the cost of these operations, and correspondingly speed up the
+signature generation.
+
+\paragraph{Comparison with ML-DSA.}
+ML-DSA\cite{Fips204} is the recently NIST-standardized ``generic''
+lattice-based post-quantum signature scheme. For signature generation,
+the ``\verb+m4f+'' implementation from the pqm4
+project\cite{KanRijSchSto2019} computes an ML-DSA-44 signature with an
+average cost of 3.943 million cycles on Arm Cortex M4, which is
+certainly faster than the 13.45 million cycles of our new Falcon-512
+implementation. However, it does that with a much larger RAM space usage
+(about 49~kB, compared to 11~kB for our new implementation), which is
+likely to hinder deployment on smartcards and similarly small embedded
+systems. \cite{BosRenSpr2022} presents a RAM-optimized ML-DSA
+implementation which can fit ML-DSA-44 signature generation in 5~kB, but
+the runtime cost raises to 18.47 million cycles.
+
+An additional consideration is the variance on signature generation
+cost. Both Falcon and ML-DSA may fail to generate a signature at first,
+and then need to retry. For Falcon with the current behaviour (and
+especially the enforcement of $\norminf{(s_0, s_1)}\leq 840$), this
+happens with probability close to $1/2450$ at $n = 512$. This means that
+if a signature must be generated within a specific time frame with
+probability at least $1 - p$ for some small $p$, then the application
+must account for a number of successive attempts. If $p = 10^{-9}$ (for
+``nine nines'' reliability) then the application must account for up to
+three signing iterations, or about 40 million cycles. For ML-DSA, the
+retry probability is much higher: on average, ML-DSA-44 needs 4.25
+iterations to succeed, and ``nine nines'' availability needs to account
+for no fewer than 78 iterations. The pqm4 benchmarks indicate that along
+with the average cost of 3.943 million cycles, the minimal observed cost
+is 1.813 million cycles, which would correspond to cases that succeed at
+first try. This allows us to estimate that each iteration has cost
+$(3.943 - 1.813)/3.25 = 0.655$ million cycles, in which case an ML-DSA
+instance that uses 78 iterations would use about 52 million cycles. This
+is more than our 40 million cycles, and this is with the ``fast'' ML-DSA
+implementation which uses 49~kB of RAM. In that sense, one may argue
+that with our implementation, Falcon-512 signature generation on Arm
+Cortex M4 is faster \emph{and} smaller than ML-DSA-44. This makes Falcon
+quite competitive.
+
+\subsection{Future Work}
+
+The following points need further exploration:
+\begin{itemize}
+
+    \item The fixed-point techniques from~\cite{AlmFouLacPre2026}
+    should be merged into this new implementation, and benchmarked.
+    This should yield some performance improvement on Arm Cortex M4,
+    and, more importantly, it would presumably make it easier to
+    mask against side-channel attacks.
+
+    \item \textsf{FFT-new} replaces \textsf{FFT-classic}, but the
+    \textsf{split} and \textsf{merge} operations from
+    \textsf{ffSampling} are unchanged; these operations really are the
+    inner primitives of \textsf{FFT-classic} and its inverse. There
+    might be possible improvements to this process similar to the
+    improvements in \textsf{FFT-new}.
+
+    \item The overall code footprint is non-negligible, at about 53~kB
+    for the signature generation code (including 13~kB which are also
+    used by key pair generation and verification, in particular the
+    SHAKE implementation, and the NTT tables modulo $q$). The
+    floating-point code includes 20~kB of constants ($R$ for
+    \textsf{FFT-selfadj-new}, $R'$, $C$ and $D$ for \textsf{LDL-new} and
+    \textsf{mul-iXadj}, and $\sin(j\pi/1024)$ for $j = 0$ to $511$ for
+    \textsf{split} and \textsf{merge}). Embedded systems usually have
+    more ROM/Flash than RAM\footnote{1 bit of SRAM needs 6 transistors,
+    but 1 bit of ROM or Flash uses about the space of a single
+    transistor; moreover, SRAM continuously draws current to maintain
+    its contents, proportionally to its size, but ROM and Flash do
+    not.}, but this is still a resource that should be preserved, and
+    some effort should be made at reducing code size.
+
+\end{itemize}
+
+% ----------------------------------------------------------------------
+
+\newpage
+\begin{thebibliography}{20}
+
+% Ideally we would do that only for URLs, but I don't know how to do
+% that in a non-painful way.
+\RaggedRight
+
+%\bibitem{AbdHwaKanSpr2022}
+%A.~Abdulrahman, V.~Hwang, M.~Kannwischer and A.~Sprenkels,
+%\emph{Faster Kyber and Dilithium on the Cortex-M4},
+%Applied Cryptography and Network Security -- ACNS~2022,
+%Lecture Notes In Computer Science, vol.~13269, pp.~853-871, 2022.
+
+%\bibitem{AAPCS}
+%\emph{Procedure Call Standard for the Arm® Architecture},
+%Arm Limited, version 2024Q3, 2024.
+
+\bibitem{AlmFouLacPre2026}
+D.~De Almeida Braga, P.-A.~Fouque, B.~Lachguel and T.~Prest,
+\emph{Toward a Secure Fixed-Point Implementation of the Falcon Signature
+Scheme},
+Advances in Cryptology - CRYPTO 2026 (part III), Lecture Notes in Computer
+Science, vol.~16802, pp.~166-197, 2026.
+
+%\bibitem{ChoYooSeo2024}
+%J.~Choi, S.~Yoon and S.C.~Seo,
+%\emph{Optimized Falcon Verify on Cortex-M4 for Post-Quantum secure UAV 
+%communications},
+%ICT Express, Elsevier, 2024,\\
+%\url{https://doi.org/10.1016/j.icte.2024.11.002}
+
+%\bibitem{DuzFieFis2024}
+%S.~Düzlü, R.~Fiedler and M.~Fischlin,
+%\emph{BUFFing FALCON without Increasing the Signature Size},\\
+%\url{https://eprint.iacr.org/2024/710}
+
+%\bibitem{GajJanKin2024}
+%P.~Gajland, J.~Janneck and E.~Kiltz,
+%\emph{A Closer Look at Falcon},\\
+%\url{https://eprint.iacr.org/2024/1769}
+
+%\bibitem{Hwa2024}
+%V.~Hwang,
+%\emph{Formal Verification of Emulated Floating-Point Arithmetic in Falcon},\\
+%Advances in Information and Computer Security: 19th International Workshop
+%on Security -- IWSEC 2024, Lecture Notes in Computer Science,
+%vol.~14977, pp.~125-141, 2024.
+
+%\bibitem{ieee754}
+%\emph{IEEE Standard for Binary Floating-Point Arithmetic}, 1985,\\
+%\url{https://doi.org/10.1109%2FIEEESTD.1985.82928}
+
+%\bibitem{Gol1991}
+%D.~Goldberg,
+%\emph{What Every Computer Scientist Should Know About Floating-Point
+%Arithmetic},
+%ACM Computing Surveys (CSUR), vol.~23, issue~1, pp.~5-48, 1991.
+
+%\bibitem{Por2019}
+%T.~Pornin,
+%\emph{New Efficient, Constant-Time Implementations of Falcon},\\
+%\url{https://eprint.iacr.org/2019/893}
+
+%\bibitem{Por2020-1}
+%T.~Pornin,
+%\emph{Efficient Elliptic Curve Operations On Microcontrollers With
+%Finite Field Extensions},\\
+%\url{https://eprint.iacr.org/2020/009}
+
+%\bibitem{XKCP}
+%G.~Bertoni, J.~Daemen, S.~Hoffert, M.~Peeters, G.~Van~Assche and
+%R.~Van~Keer,
+%\emph{eXtended Keccak Code Package},\\
+%\url{https://github.com/XKCP/XKCP}
+
+%\bibitem{AarAra2022}
+%M.~Aardal and D.~Aranha,
+%\emph{2DT-GLS: Faster and exception-free scalar multiplication in the
+%GLS254 binary curve},\\
+%\url{https://eprint.iacr.org/2022/748}
+
+%\bibitem{AmbBosFayJoyLocMur2017}
+%C.~Ambrose, J.~Bos, B.~Fay, M.~Joye, M.~Lochter and B.~Murray,
+%\emph{Differential Attacks on Deterministic Signatures},\\
+%\url{https://eprint.iacr.org/2017/975}
+
+%\bibitem{X962}
+%Accredited Standards Committee X9,
+%\emph{The Elliptic Curve Digital Signature Algorithm (ECDSA)},
+%American National Standards Institute, ANS X9.62, 2005.
+
+%\bibitem{X963}
+%Accredited Standards Committee X9,
+%\emph{Key Agreement and Key Transport Using Elliptic Curve Cryptography},
+%American National Standards Institute, ANS X9.63, 2017.
+
+%\bibitem{AntBroGalLamStrVan2005}
+%A.~Antipa, D.~Brown, R.~Gallant, R.~Lambert, R.~Struik and S.~Vanstone,
+%\emph{Accelerated Verification of ECDSA signatures},
+%Selected Areas in Cryptography - SAC 2005, Lecture Notes in Computer
+%Science, vol.~3897, pp.~307-318, 2005.
+
+%\bibitem{AraLopHan2010}
+%D.~Aranha, J.~López and D.~Hankerson,
+%\emph{Efficient Software Implementation of Binary Field Arithmetic Using
+%Vector Instruction Sets},
+%Progress in Cryptology - LATINCRYPT 2010,
+%Lecture Notes in Computer Science, vol.~6212, pp.~144-161, 2010.
+
+%\bibitem{RistrettoWeb}
+%T.~Arcieri, I.~Lovecruft and H.~de Valence,
+%\emph{The Ristretto Group},\\
+%\url{https://ristretto.group/}
+
+%\bibitem{Atk1992}
+%A.~Atkin,
+%\emph{Probabilistic primality testing (summary by F. Morain)}, Technical Report 1779, INRIA, 1992,\\
+%\url{http://algo.inria.fr/seminars/sem91-92/atkin.pdf}
+
+\bibitem{Bab1986}
+L.~Babai,
+\emph{On Lovasz’ lattice reduction and the nearest lattice point problem},
+Combinatorica, vol.~6, pp.~1-13, 1986.
+
+%\bibitem{BasMaiPop2023}
+%A.~Basso, L.~Maino and G.~Pope,
+%\emph{FESTA: Fast Encryption from Supersingular Torsion Attacks},\\
+%\url{https://ia.cr/2023/660}
+
+%\bibitem{Ber2006}
+%D.~Bernstein,
+%\emph{Curve25519: new Diffie-Hellman speed records},
+%Public Key Cryptography - PKC 2006,
+%Lecture Notes in Computer Science, vol.~3958, pp.~207-228, 2006.
+
+%\bibitem{BerDuiLanSchYan2012}
+%D.~Bernstein, N.~Duif, T.~Lange, P.~Schwabe and B.-Y.~Yang,
+%\emph{High-speed high-security signatures},
+%Journal of Cryptographic Engineering, vol.~2, issue~2, pp.~77-89, 2012.
+
+%\bibitem{eBACS}
+%D.~Bernstein and T.~Lange,
+%\emph{eBACS: ECRYPT Benchmarking of Cryptographic Systems},\\
+%\url{https://bench.cr.yp.to} (accessed 4 August 2022).
+
+%\bibitem{BerLanRez2008}
+%D.~Bernstein, T.~Lange and R.~Rezaeian Farashahi,
+%\emph{Binary Edwards Curves},
+%Cryptographic Hardware and Embedded Systems - CHES 2008,
+%Lecture Notes in Computer Science, vol.~5154, pp.~244-265, 2008.
+
+%\bibitem{BerHamKraLan2013}
+%D.~Bernstein, M.~Hamburg, A.~Krasnova and T.~Lange,
+%\emph{Elligator: elliptic-curve points indistinguishable from uniform
+%random strings},
+%Proceedings of the 2013 ACM SIGSAC Conference on Computer and Communications
+%Security, 2013,\\
+%\url{https://doi.org/10.1145/2508859.2516734}
+
+%\bibitem{BerYan2019}
+%D.~Bernstein and B.-Y.~Yang,
+%\emph{Fast constant-time gcd computation and modular inversion},\\
+%\url{https://gcd.cr.yp.to/papers.html#safegcd}
+
+\bibitem{Ber2026}
+P.-A.~Berthet,
+\emph{Masking, Sequences, and FALCON: A Theoretical Study on Masking
+Strategies Using Sequences for Non-Linear Operators in the FALCON
+Post-Quantum Signature},\\
+\url{https://eprint.iacr.org/2026/1534}
+
+\bibitem{BerPaiTavBosCol2025}
+P.-A.~Berthet, J.~Paillet, C.~Tavernier, L.~Bossuet and B.~Colombier,
+\emph{Masked Computation of the Floor Function and Its Application to
+the FALCON Signature},
+IACR Communications in Cryptology, vol.~1, issue~4, 2025.
+
+\bibitem{BerTav2025}
+P.-A.~Berthet, C.~Tavernier,
+\emph{Improving the masked division for the FALCON signature},\\
+\url{https://eprint.iacr.org/2025/628}
+
+%\bibitem{BilJoy2003}
+%O.~Billet and M.~Joye,
+%\emph{The Jacobi model of an elliptic curve and side-channel analysis},
+%AAECC-15, Lecture Notes in Computer Science, vol.~2643, pp.~34-42, 2003.
+
+%\bibitem{Bod2007}
+%M.~Bodrato,
+%\emph{Towards Optimal Toom-Cook Multiplication for Univariate and
+%Multivariate Polynomials in Characteristic 2 and 0},
+%International Workshop on the Arithmetic of Finite Fields - WAIFI 2007,
+%Lecture Notes in Computer Science, vol.~4547, pp.~116-133, 2007.
+
+\bibitem{BosRenSpr2022}
+J.~Bos, J.~Renes and A.~Sprenkels,
+\emph{Dilithium for Memory Constrained Devices},
+Progress in Cryptology - AFRICACRYPT 2022, Lecture Notes in Computer
+Science, vol.~13503, pp.~217-235, 2022.
+
+%\bibitem{BreGauThoZim2008}
+%R.~Brent, P.~Gaudry, E.~Thomé and P.~Zimmerman,
+%\emph{Faster multiplication in GF(2)[x]},
+%Algorithmic Number Theory - ANTS-VIII, Lecture Notes in Computer Science,
+%vol.~5011, pp.~153-166, 2008.
+
+%\bibitem{BriCorIcaMadRanTib2010}
+%É.~Brier, J.-S.~Coron, T.~Icart, D.~Madore, H.~Randriam and M.~Tibouchi,
+%\emph{Efficient Indifferentiable Hashing into Ordinary Elliptic Curves},
+%Advances in Cryptology - CRYPTO 2010, Lecture Notes in Computer Science,
+%vol.~6223, pp.~237-254, 2010.
+
+%\bibitem{Bri1983}
+%E.~Brickell,
+%\emph{A Fast Modular Multiplication Algorithm with Application to Two Key
+%Cryptography},
+%Advances in Cryptology - CRYPTO 1982, pp.~51-60, 1983
+
+%\bibitem{BruCurHof1993}
+%H.~Brunner, A.~Curriger and M.~Hofstetter,
+%\emph{On computing multiplicative inverses in GF($2^m$)},
+%IEEE Transactions on Computers, vol.~42, issue~8, pp.~1010-1015, 1993.
+
+%\bibitem{CanKal1991}
+%D.~Cantor and E.~Kaltofen,
+%\emph{On fast multiplication of polynomials over arbitrary algebras},
+%Acta Informatica, vol.~28, issue~7, pp.~693-701, 1991.
+
+%\bibitem{SEC2v2}
+%Certicom Research,
+%\emph{SEC 2: Recommended Elliptic Curve Domain Parameters},
+%version~2.0, 2010,\\
+%\url{https://www.secg.org/sec2-v2.pdf}
+
+%\bibitem{Cha2022}
+%K.~Chalkias,
+%\emph{ed25519-unsafe-libs},\\
+%\url{https://github.com/MystenLabs/ed25519-unsafe-libs}
+
+%\bibitem{ChaGarNik2020}
+%K.~Chalkias, F.~Garillot and V.~Nikolaenko,
+%\emph{Taming the Many EdDSAs},
+%Security Standardisation Research - SSR 2020, Lecture Notes in
+%Computer Science, vol.~12529, pp.~67-90, 2020.
+
+\bibitem{CheChe2024}
+K.-Y.~Chen and J.-P.~Chen,
+\emph{Masking Floating-Point Number Multiplication and Addition of Falcon},
+IACR Transactions on Cryptographic Hardware and Embedded Systems,
+vol.~2024, issue~2, pp.~276-303, 2024.
+
+\bibitem{CheMinLiuGaoZho2025}
+S.~Chen, J.~Ming, Y.~Liu, Y.~Gao and Y.~Zhou,
+\emph{Masked Gadgets for Integer-Floating-Point Conversion with
+Applications to Falcon},
+2025 IEEE 43rd International Conference on Computer Design (ICCD),
+pp.~507-514, 2025.
+
+%\bibitem{ChuChu1986}
+%D.~Chudnovsky and G.~Chudnovsky,
+%\emph{Sequences of numbers generated by addition
+%in formal groups and new primality and factorization tests},
+%Advances in Applied Mathematics, vol.~7, issue~4, pp.~385–434, 1986.
+
+%\bibitem{CohFre2006}
+%H.~Cohen and G.~Frey (editors),
+%\emph{Handbook of Elliptic and Hyperelliptic Curve Cryptography},
+%Chapman and Hall/CRC, 2006.
+
+%\bibitem{Col1726}
+%J.~Colson,
+%\emph{A Short Account of Negativo-Affirmative Arithmetick},
+%Philosophical Transactions (1683-1775), vol.~34, pp.~161-173, 1726.
+
+%\bibitem{FrostDraft}
+%D.~Connolly, C.~Komlo, I.~Goldberg and C.~Wood,
+%\emph{Two-Round Threshold Schnorr Signatures with FROST},\\
+%\url{https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-frost-08}
+
+\bibitem{CooTuk1965}
+J.~Cooley and J.~Tukey,
+\emph{An algorithm for the machine calculation of complex Fourier series},
+Mathematics of Computation, vol.~19, issue~90, pp.~297-301.
+
+%\bibitem{CreJac2019}
+%C.~Cremers and D.~Jackson,
+%\emph{Prime, Order Please! Revisiting Small Subgroup and Invalid Curve
+%Attacks on Protocols using Diffie-Hellman},
+%IEEE 32nd Computer Security Foundations Symposium (CSF), 2019.
+
+%\bibitem{dalek-crypto}
+%I.~Lovecruft and H.~de Valence,
+%\emph{Dalek cryptography},\\
+%\url{https://github.com/dalek-cryptography}
+
+%\bibitem{DifHel1976}
+%W.~Diffie and M.~Hellman,
+%\emph{New directions in cryptography},
+%IEEE Transactions on Information Theory, vol.~22, issue~6, pp.~644-654, 1976.
+
+\bibitem{DucPre2016}
+L.~Ducas and T.~Prest,
+\emph{Fast Fourier Orthogonalization},
+ISSAC '16: Proceedings of the 2016 ACM International Symposium on Symbolic
+and Algebraic Computation, pp.~191-198, 2016.
+
+%\bibitem{Duq2007}
+%S.~Duquesne,
+%\emph{Improving the arithmetic of elliptic curves in the Jacobi model},
+%Information Processing Letters, vol.~104, issue~3, pp.~101–105, 2007.
+
+%\bibitem{FisPat1974}
+%M.~Fischer and M.~Paterson,
+%\emph{String-Matching and Other Products},
+%MAC Technical Memorandum 41, Massachusetts Institute of Technology, 1974.
+
+%\bibitem{Fog2023}
+%A.~Fog,
+%\emph{The microarchitecture of Intel, AMD, and VIA CPUs},\\
+%\url{https://www.agner.org/optimize/microarchitecture.pdf}
+
+\bibitem{FouGajGroJanKil2026}
+P.-A.~Fouque, P.~Gajland, H.~de~Groote, J.~Janneck and E.~Kiltz,
+\emph{A Closer Look at Falcon},
+Advances in Cryptology - EUROCRYPT 2026 (part IV), Lecture Notes in
+Computer Science, vol.~16544, pp.~3-31, 2026.
+
+%\bibitem{GalLamVan2001}
+%R.~Gallant, J.~Lambert and S.~Vanstone,
+%\emph{Faster Point Multiplication on Elliptic Curves with Efficient
+%Endomorphisms},
+%Advances in Cryptology - CRYPTO 2001, Lecture Notes in Computer Science,
+%vol.~2139, pp.~190-200, 2001.
+
+%\bibitem{GalLinSco2009}
+%S.~Galbraith, X.~Lin and M.~Scott,
+%\emph{Endomorphisms for Faster Elliptic Curve Cryptography on a Large
+%Class of Curves},
+%Advances in Cryptology - EUROCRYPT 2009, Lecture Notes in Computer Science,
+%vol.~5479, pp.~518-535, 2009.
+
+%\bibitem{GauHesSma2002}
+%P.~Gaudry, F.~Hess and N.~Smart,
+%\emph{Constructive and destructive facets of Weil descent on elliptic curves},
+%Journal of Cryptology, vol.~15, issue~1, pp.~19-46, 2002.
+
+\bibitem{Gau1866}
+C.~Gauss,
+\emph{Nachlass: Theoria interpolationis methodo nova tractata},
+Werke, vol.~3, pp.~265-303, Göttingen: Königliche Gesellschaft der Wissenschaften, 1866.
+
+\bibitem{GenSan1966}
+W.~Gentleman and G.~Sande,
+\emph{Fast Fourier transforms -- for fun and profit},
+AFIPS '66 (Fall), pp.~563-578, 1966.
+
+%\bibitem{Ham2009}
+%M.~Hamburg,
+%\emph{Accelerating AES with Vector Permute Instructions},
+%Cryptographic Hardware and Embedded Systems - CHES 2009,
+%Lecture Notes in Computer Science, vol.~5747, pp.~18-32, 2009.
+
+%\bibitem{Ham2015-1}
+%M.~Hamburg,
+%\emph{Decaf: Eliminating cofactors through point compression},
+%Advances in Cryptology - CRYPTO 2015, Lecture Notes in Computer Science,
+%vol.~9215, pp.~705-723, 2015.
+
+%\bibitem{Ham2015-2}
+%M.~Hamburg,
+%\emph{Ed448-Goldilocks, a new elliptic curve},\\
+%\url{https://eprint.iacr.org/2015/625}
+
+%\bibitem{HanKarMen2009}
+%D.~Hankerson, K.~Karabina and A.~Menezes,
+%\emph{Analyzing the Galbraith-Lin-Scott Point Multiplication Method for
+%Elliptic Curves over Binary Fields},
+%IEEE Transactions on Computers, vol.~58, issue~10, pp.~1411-1420, 2009.
+
+%\bibitem{HanMenVan2004}
+%D.~Hankerson, A.~Menezes and S.~Vanstone,
+%\emph{Guide to Elliptic Curve Cryptography},
+%Springer/Sci-Tech/Trade, 2004.
+
+%\bibitem{HisWonCarDaw2008}
+%H.~Hisil, K.~Wong, G.~Carter and E.~Dawson,
+%\emph{Twisted Edwards Curves Revisited},
+%Advances in Cryptology - ASIACRYPT 2008, Lecture Notes in Computer Science,
+%vol.~5350, pp.~326-343, 2008.
+
+%\bibitem{HisWonCarDaw2009}
+%H.~Hisil, K.~Wong, G.~Carter and E.~Dawson,
+%\emph{Jacobi Quartic Curves Revisited},
+%Information Security and Privacy - ACISP 2009, Lecture Notes in Computer
+%Science, vol.~5594, pp.~452-468, 2009.
+
+%\bibitem{Hon1989}
+%J.~Honkala,
+%\emph{On Number Systems with Negative Digits},
+%Annales Academiæ Scientiarum Fennicæ, Series A. I. Mathematica,
+%vol.~14, issue~1, pp.149-156, 1989.
+
+%\bibitem{ItoTsu1988}
+%T.~Itoh and S.~Tsujii,
+%\emph{A Fast Algorithm for Computing Multiplicative Inverses in
+%$\GF(2^m)$ Using Normal Bases},
+%Information and Computation, vol.~78, pp.~171-177, 1988.
+
+%\bibitem{Jac1829}
+%C.~G.~J.~Jacobi,
+%\emph{Fundamenta nova theoriae functionum ellipticarum},
+%Sumtibus fratrum, 1829.
+
+%\bibitem{EdDSArfc8032}
+%S.~Josefsson and I.~Liusvaara,
+%\emph{Edwards-Curve Digital Signature Algorithm (EdDSA)},\\
+%\url{https://tools.ietf.org/html/rfc8032}
+
+\bibitem{KanRijSchSto2019}
+M.~Kannwischer, J.~Rijneveld, P.~Schwabe and K.~Stoffelen,
+\emph{pqm4: Testing and Benchmarking NIST PQC on ARM Cortex-M4},\\
+\url{https://eprint.iacr.org/2019/844}
+
+\bibitem{KarAys2024}
+E.~Karabulut and A.~Aysu,
+\emph{Masking FALCON’s floating-point multiplication in hardware},
+IACR Transactions on Cryptographic Hardware and Embedded Systems,
+vol.~2024, issue~4, pp.~483-508, 2024.
+
+%\bibitem{KarOfm1962}
+%А.~Карацуба and Ю.~Офман,
+%\emph{Умножение Многозначных Чисел На Автоматах},
+%Доклады Академи и наук СССР, vol.~145, issue~2, pp.~293-294, 1962.
+%{\fontencoding{T2A}\fontfamily{NimbusSerif}\selectfont А.~Карацуба}
+%and {\fontencoding{T2A}\fontfamily{NimbusSerif}\selectfont Ю.~Офман,
+%\emph{Умножение Многозначных Чисел На Автоматах},
+%Доклады Академи и наук СССР}, vol.~145, pp.~293-294, 1962.
+%A.~Karatsuba and Y.~Ofman,
+%\emph{Multiplication of Many-Digital Numbers by Automatic Computers},
+%Proceedings of the USSR Academy of Sciences, vol.~145, pp.~293-294, 1962.
+
+%\bibitem{KimKim2007}
+%K.~Kim and S.~Kim,
+%\emph{A New Method for Speeding Up Arithmetic on Elliptic Curves over
+%Binary Fields},\\
+%\url{https://eprint.iacr.org/2007/181}
+
+\bibitem{Kle2000}
+P.~Klein,
+\emph{Finding the closest lattice vector when it’s unusually close},
+SODA '00: Proceedings of the eleventh annual ACM-SIAM symposium on
+Discrete algorithms, pp.~937-941, 2000.
+
+%\bibitem{Knu1969}
+%D.~Knuth,
+%\emph{The Art of Computer Programming, volume~2: Seminumerical Algorithms},
+%Addison-Wesley, 1969.
+
+%\bibitem{KomGol2020}
+%C.~Komlo and I.~Goldberg,
+%\emph{FROST: Flexible Round-Optimized Schnorr Threshold Signatures},\\
+%\url{https://eprint.iacr.org/2020/852}
+
+%\bibitem{rfc7748}
+%A.~Langley, M.~Hamburg and S.~Turner,
+%\emph{Elliptic Curves for Security},\\
+%\url{https://www.rfc-editor.org/rfc/rfc7748}
+
+%\bibitem{Lean}
+%{\fontspec{texgyreadventor-regular.otf}\selectfont{L\kern -0.1em\reflectbox{E}\kern -0.13em\raisebox{\depth}{\scalebox{1}[-1]{A}}\kern -0.13em{N}}} \emph{Programming Language},\\
+%\url{https://lean-lang.org/}
+
+%\bibitem{Len2019}
+%E.~Lenngren,
+%\emph{X25519 for ARM AArch64},\\
+%\url{https://github.com/Emill/X25519-AArch64}
+
+%\bibitem{Len2020}
+%E.~Lenngren,
+%\emph{X25519 for ARM Cortex-M4 and other ARM processors},\\
+%\url{https://github.com/Emill/X25519-Cortex-M4}
+
+%\bibitem{LopDah1999}
+%J.~López and R.~Dahab,
+%\emph{Fast Multiplication on Elliptic Curve Over $\GF(2^m)$ without
+%precomputation},
+%Cryptographic Hardware and Embedded Systems - CHES'99,
+%Lecture Notes in Computer Science, vol.~1717, pp.~316-327, 1999.
+
+%\bibitem{MenOorVan1996}
+%A.~Menezes, P.~van Oorschot and S.~Vanstone,
+%\emph{Handbook of Applied Cryptography},
+%CRC Press, 1996,\\
+%\url{https://cacr.uwaterloo.ca/hac/}
+
+%\bibitem{Mon1985}
+%P.~Montgomery,
+%\emph{Modular Multiplication Without Trial Division},
+%Mathematics of Computation, vol.~44, issue~170, pp.~519-521, 1985.
+
+%\bibitem{MooShu2011}
+%D.~Moody and D.~Shumow,
+%\emph{Analogues of Vélu's Formulas for Isogenies on Alternate Models of
+%Elliptic Curves},
+%\url{https://eprint.iacr.org/2011/430}
+
+%\bibitem{NacSte2001}
+%D.~Naccache and J.~Stern,
+%\emph{Signing on a Postcard},
+%Financial Cryptography - FC 2000, Lecture Notes in Computer Science,
+%vol.~1962, pp.~121-135, 2001.
+
+%\bibitem{NatSar2020}
+%K.~Nath and P.~Sarkar,
+%\emph{Efficient 4-way Vectorizations of the Montgomery Ladder},\\
+%\url{https://eprint.iacr.org/2020/378}
+
+%\bibitem{NevSmaWar2009}
+%G.~Neven, N.~P.~Smart and B.Warinschi,
+%\emph{Hash function requirements for Schnorr signatures},
+%Journal of Mathematical Cryptology, vol.~3, issue 1, pp.~69-87, 2009.
+
+\bibitem{NISTPQC}
+\emph{Post-Quantum Cryptography},
+National Institute of Standard and Technology,\\
+\url{https://www.nist.gov/pqcrypto}
+
+%\bibitem{Fips180}
+%Information Technology Laboratory,
+%\emph{Secure Hash Standard (SHS)},
+%National Institute of Standard and Technology, FIPS~180-4, 2015.
+
+%\bibitem{Fips186}
+%Information Technology Laboratory,
+%\emph{Digital Signature Standard (DSS)},
+%National Institute of Standard and Technology, FIPS~186-5, 2023.
+
+%\bibitem{Fips202}
+%Information Technology Laboratory,
+%\emph{SHA-3 Standard: Permutation-Based Hash and Extendable-Output
+%Functions},
+%National Institute of Standard and Technology, FIPS~202, 2015.
+
+\bibitem{Fips203}
+Information Technology Laboratory,
+\emph{Module-Lattice-Based Key-Encapsulation Mechanism Standard},
+National Institute of Standard and Technology, FIPS~203, 2024.
+
+\bibitem{Fips204}
+Information Technology Laboratory,
+\emph{Module-Lattice-Based Digital Signature Standard},
+National Institute of Standard and Technology, FIPS~204, 2024.
+
+%\bibitem{BLAKE3}
+%J.~O'Connor, J.-P.~Aumasson, S.~Neves and Z.~Wilcox-O'Hearn,
+%\emph{BLAKE3},\\
+%\url{https://github.com/BLAKE3-team/BLAKE3}
+
+%\bibitem{OliLopAraRod2014}
+%T.~Oliveira, J.~López-Hernández, D.~Aranha and F.~Rodríguez-Henríquez,
+%\emph{Two is the fastest prime: lambda coordinates for binary elliptic
+%curves},
+%Journal of Cryptographic Engineering, vol.~4, issue~1, pp.~3-17, 2014.
+
+%\bibitem{OliLopAraRod2016}
+%T.~Oliveira, J.~López-Hernández, D.~Aranha and F.~Rodríguez-Henríquez,
+%\emph{Improving the performance of the GLS254},
+%Presented at the CHES 2016 Rump Session.
+
+%\bibitem{PetQui2012}
+%C.~Petit and J.-J.~Quisquater,
+%\emph{On Polynomial Systems Arising from a Weil Descent},
+%Advances in Cryptology - ASIACRYPT 2012,
+%Lecture Notes in Computer Science, vol.~7658, pp.~451-466, 2012.
+
+%\bibitem{PhaKor1994}
+%D.~Phatak and I.~Koren,
+%\emph{Hybrid Signed-Digit Number Systems: A Unified Framework for
+%Redundant Number Representations With Bounded Carry Propagation Chains},
+%IEEE Transactions on Computers, vol.~43, issue~8, pp.~880-891, 1994.
+
+%\bibitem{PodSomSchLocRos2018}
+%D.~Poddebniak, J.~Somorovsky, S.~Schinzel, M.~Lochter and P.~Rösler,
+%\emph{Attacking Deterministic Signature Schemes Using Fault Attacks},
+%2018 IEEE European Symposium on Security and Privacy (EuroS\&P),
+%pp.~338-352, 2018.
+
+%\bibitem{DeterministicECDSArfc}
+%T.~Pornin,
+%\emph{Deterministic Usage of the Digital Signature Algorithm (DSA) and
+%Elliptic Curve Digital Signature Algorithm (ECDSA)},\\
+%\url{https://tools.ietf.org/html/rfc6979}
+
+%\bibitem{BearSSL}
+%T.~Pornin,
+%\emph{BearSSL: a smaller SSL/TLS library},\\
+%\url{https://www.bearssl.org/}
+
+%\bibitem{Por2020-2}
+%T.~Pornin,
+%\emph{Optimized Lattice Basis Reduction In Dimension 2, and Fast Schnorr
+%and EdDSA Signature Verification},\\
+%\url{https://eprint.iacr.org/2020/454}
+
+%\bibitem{Por2020-3}
+%T.~Pornin,
+%\emph{Optimized Binary GCD for Modular Inversion},\\
+%\url{https://eprint.iacr.org/2020/972}
+
+%\bibitem{Por2020-5}
+%T.~Pornin,
+%\emph{Double-Odd Elliptic Curves},\\
+%\url{https://eprint.iacr.org/2020/1558}
+
+%\bibitem{Por2022-4}
+%T.~Pornin,
+%\emph{Double-Odd Jacobi Quartic},\\
+%\url{https://eprint.iacr.org/2022/1052}
+
+%\bibitem{Por2022-6}
+%T.~Pornin,
+%\emph{Efficient and Complete Formulas for Binary Curves},\\
+%\url{https://eprint.iacr.org/2022/1325}
+
+%\bibitem{Por2023-3}
+%T.~Pornin,
+%\emph{On Multiplications with Unsaturated Limbs},\\
+%\url{https://research.nccgroup.com/2023/09/18/on-multiplications-with-unsaturated-limbs/}
+
+\bibitem{PorPre2019}
+T.~Pornin and T.~Prest,
+\emph{More Efficient Algorithms for the NTRU Key Generation using the
+Field Norm},
+Public Key Cryptography - PKC 2019 (part II), Lecture Notes in Computer
+Science, vol.~11443, pp.~504-533, 2019.
+
+\bibitem{Por2023-1}
+T.~Pornin,
+\emph{Improved Key Pair Generation for Falcon, BAT and Hawk},\\
+\url{https://eprint.iacr.org/2023/290}
+
+\bibitem{Por2025-2}
+T.~Pornin,
+\emph{Constant-Time Code: The Pessimist Case},\\
+\url{https://eprint.iacr.org/2025/435}
+
+\bibitem{Por2025-4}
+T.~Pornin,
+\emph{Improved (Again) Key Pair Generation for Falcon, BAT and Hawk},\\
+\url{https://eprint.iacr.org/2025/1239}
+
+\bibitem{FalconRound3}
+T.~Prest, P.-A.~Fouque, J.~Hoffstein, P.~Kirchner,
+V.~Lyubashevsky, T.~Pornin, T.~Ricosset, G.~Seiler, W.~Whyte and Z.~Zhang,
+\emph{Falcon},
+Technical report, National Institute of Standards and Technology, 2019,
+\url{https://csrc.nist.gov/Projects/post-quantum-cryptography/post-quantum-cryptography-standardization/round-3-submissions}
+
+%\bibitem{RenCosBat2016}
+%J.~Renes, C.~Costello and L.~Batina,
+%\emph{Complete Addition Formulas for Prime Order Elliptic Curves},
+%Advances in Cryptology - EUROCRYPT 2016, Lecture Notes in Computer Science,
+%vol.~9665, pp.~403-428, 2016.\\
+%\url{https://ia.cr/2015/1060}
+
+%\bibitem{RivShaAdl1978}
+%R.~Rivest, A.~Shamir and L.~Adleman,
+%\emph{A Method for Obtaining Digital Signatures and Public-Key Cryptosystems},
+%Communications of the ACM, vol.~21, issue~2, pp.~120-126, 1978.
+
+%\bibitem{BLAKE2}
+%M.-J.~Saarinen and J.-P.~Aumasson,
+%\emph{The BLAKE2 Cryptographic Hash and Message Authentication Code (MAC)}\\
+%\url{https://datatracker.ietf.org/doc/html/rfc7693}
+
+%\bibitem{Sch1989}
+%C.~Schnorr,
+%\emph{Efficient identification and signatures for smart cards},
+%Advances in Cryptology - CRYPTO '89, Lecture Notes in Computer Science,
+%vol.~435, pp.~239-252, 1990.
+
+%\bibitem{ShaWoe2006}
+%A.~Shallue and C.~van de Woestijne,
+%\emph{Construction of rational points on elliptic curves over finite
+%fields},
+%Algorithm Number Theory Symposium - ANTS 2006, Lecture Notes in Computer
+%Science, vol.~4076, pp.~510-524, 2006.
+
+%\bibitem{Sil2009}
+%J.~Silverman,
+%\emph{The Arithmetic of Elliptic Curves} (2nd edition),
+%Springer New York, NY, 2009.
+
+%\bibitem{Sol2000}
+%J.~Solinas,
+%\emph{Efficient Arithmetic on Koblitz Curves},
+%Designs, Codes and Cryptography, vol.~19, issue~2-3, pp.~195-249, 2000.
+
+%\bibitem{Str1964}
+%E.~Straus,
+%\emph{Addition chains of vectors (problem 5125)},
+%American Mathematical Monthly, vol.~70, pp.~806-808, 1964.
+
+\bibitem{SunZhoZhaTaoQiaMin2022}
+S.~Sun, Y.~Zhou, R.~Zhang, Y.~Tao, Z.~Qiao and J.~Ming,
+\emph{Fast Fourier orthogonalization over NTRU lattices},
+Information and Communications Security - ICICS 2022,
+Lecture Notes in Computer Science, vol.~13407, pp.~109-127, 2022.
+
+%\bibitem{Too1963}
+%А.~Тоом,
+%\emph{О сложности схемы из функциональных злементов, реализирующей
+%умножение целых чисел},
+%Доклады Академи и наук СССР, vol.~153, issue~3, pp.~496-498, 1963.
+
+%\bibitem{Ula2007}
+%M.~Ulas,
+%\emph{Rational Points on Certain Hyperelliptic Curves over Finite Fields},
+%Bulletin of the Polish Academy of Sciences - Mathematics, vol.~55,
+%issue~2, pp.~97-104, 2007.
+
+%\bibitem{RistrettoDraft}
+%H.~de Valence, J.~Grigg, M.~Hamburg, I.~Lovecruft, G.~Tankersly and
+%F.~Valsorda,
+%\emph{The ristretto255 and decaf448 Groups},\\
+%\url{https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-03}
+
+%\bibitem{Vel1971}
+%J.~Vélu,
+%\emph{Isogénies entre courbes elliptiques},
+%C.R. Acad. Sc. Paris, Série A, vol.~273, pp.~238-241, 1971.
+
+%\bibitem{Was2008}
+%L.~Washington,
+%\emph{Elliptic Curves: Number Theory and Cryptography} (2nd edition),
+%Chapman and Hall/CRC, 2008.
+
+%\bibitem{WhiWat1927}
+%E.~Whittaker and G.~Watson,
+%\emph{A Course of Modern Analysis},
+%Cambridge University Press, 1927.
+
+%\bibitem{Wycheproof}
+%\emph{Project Wycheproof},\\
+%\url{https://github.com/C2SP/wycheproof}
+
+\end{thebibliography}
+
+% ----------------------------------------------------------------------
+
+\end{document}
